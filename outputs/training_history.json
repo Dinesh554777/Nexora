@@ -1,0 +1,92 @@
+{
+  "config": {
+    "epochs": 10,
+    "batch_size": 4,
+    "lr": 0.001,
+    "base": 16,
+    "input_size": [
+      256,
+      256
+    ],
+    "max_slices_per_volume": 3,
+    "num_workers": 0,
+    "seed": 42
+  },
+  "data_source": "SYNTHETIC fixtures (regenerated at C:\\Users\\hp\\Downloads\\Dinesh Projects\\Nexora\\data\\fixtures_tmp)",
+  "device": "cpu",
+  "elapsed_seconds": 58.65,
+  "best_val_dice": 0.9178714156150818,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.9498459498087565,
+      "val_loss": 0.965764582157135,
+      "val_dice": 0.03419492766261101,
+      "val_iou": 0.01739501953125
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.9307070043351915,
+      "val_loss": 0.9658134579658508,
+      "val_dice": 0.03419492766261101,
+      "val_iou": 0.01739501953125
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.9243995149930319,
+      "val_loss": 0.9656592011451721,
+      "val_dice": 0.04095056280493736,
+      "val_iou": 0.020903408527374268
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.9205919769075182,
+      "val_loss": 0.9654290080070496,
+      "val_dice": 0.049331244081258774,
+      "val_iou": 0.025289492681622505
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.9184078110588921,
+      "val_loss": 0.9641790390014648,
+      "val_dice": 0.044222284108400345,
+      "val_iou": 0.022611873224377632
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.9163064426845975,
+      "val_loss": 0.9620906710624695,
+      "val_dice": 0.0,
+      "val_iou": 0.0
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.9140583806567721,
+      "val_loss": 0.9597871899604797,
+      "val_dice": 0.0,
+      "val_iou": 0.0
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.9117291900846693,
+      "val_loss": 0.9574851989746094,
+      "val_dice": 0.0023682652972638607,
+      "val_iou": 0.0011883541010320187
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.9093269175953336,
+      "val_loss": 0.9534838199615479,
+      "val_dice": 0.3096145689487457,
+      "val_iou": 0.1856621503829956
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.9067863888210721,
+      "val_loss": 0.9321004748344421,
+      "val_dice": 0.9178714156150818,
+      "val_iou": 0.8483794331550598
+    }
+  ],
+  "caveat": "metrics measured on SYNTHETIC fixtures; they verify that learning mechanics work and say NOTHING about real meniscus segmentation performance"
+}

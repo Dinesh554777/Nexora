@@ -94,18 +94,13 @@ class SliceDataset(Dataset):
     def __init__(self, pairs: list, subjects: set, top_k: int,
                  input_size: tuple[int, int], foreground_labels=(MENISCUS_LABEL,)):
         self.cfg = PreprocessConfig(target_size=input_size)
-        full = PairSlicesDataset(pairs=pairs, slice_axis=2, top_k=top_k,
+        full = PairSlicesDataset(pairs=pairs, slice_axis=2,
+                                 top_k_per_volume=top_k,
                                  foreground_labels=foreground_labels)
-        self.items = [it for it in full if it.volume_index is not None and True]
-        ds = full
-        kept = []
-        for it in ds:
-            src = os.path.basename(it.source_image)
-            from nexora.data.splitting import extract_subject_id
-            sid = extract_subject_id(src)
-            if sid in subjects:
-                kept.append(it)
-        self.items = kept
+        self.items = [
+            it for it in full
+            if extract_subject_id(os.path.basename(it.source_image)) in subjects
+        ]
 
     def __len__(self) -> int:
         return len(self.items)
