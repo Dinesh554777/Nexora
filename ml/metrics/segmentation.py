@@ -115,3 +115,66 @@ def iou_score(
         torch.full_like(inter, float(empty_value)),
     )
     return _reduce(per_sample, reduction)
+
+
+def precision_score(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    threshold: float = 0.5,
+    reduction: str = "mean",
+    empty_value: float = 1.0,
+) -> torch.Tensor:
+    """Hard precision TP/(TP+FP) per sample; NaN-free by construction.
+
+    Empty conventions: pred empty & gt empty -> `empty_value` (nothing
+    predicted, nothing to find); pred empty & gt non-empty -> 0.0
+    (everything missed); pred non-empty & gt empty -> 0.0 (pure FP).
+    """
+    p, g = _check_pair(pred, target)
+    pb = (p.float() > threshold).reshape(p.shape[0], -1)
+    gb = (g.float() > threshold).reshape(g.shape[0], -1)
+
+    tp = (pb & gb).sum(dim=1).float()
+    fp = (pb & ~gb).sum(dim=1).float()
+    n_pred = tp + fp
+    n_gt = gb.sum(dim=1).float()
+
+    per_sample = torch.where(
+        n_pred > 0,
+        tp / n_pred.clamp_min(1.0),
+        torch.where(n_gt == 0,
+                    torch.full_like(tp, float(empty_value)),
+                    torch.zeros_like(tp)),
+    )
+    return _reduce(per_sample, reduction)
+
+
+def recall_score(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    threshold: float = 0.5,
+    reduction: str = "mean",
+    empty_value: float = 1.0,
+) -> torch.Tensor:
+    """Hard recall TP/(TP+FN) per sample; NaN-free by construction.
+
+    Empty conventions mirror precision: both empty -> `empty_value`;
+    gt non-empty & pred empty -> 0.0; gt empty & pred non-empty -> 0.0.
+    """
+    p, g = _check_pair(pred, target)
+    pb = (p.float() > threshold).reshape(p.shape[0], -1)
+    gb = (g.float() > threshold).reshape(g.shape[0], -1)
+
+    tp = (pb & gb).sum(dim=1).float()
+    fn = (~pb & gb).sum(dim=1).float()
+    n_gt = tp + fn
+    n_pred = pb.sum(dim=1).float()
+
+    per_sample = torch.where(
+        n_gt > 0,
+        tp / n_gt.clamp_min(1.0),
+        torch.where(n_pred == 0,
+                    torch.full_like(tp, float(empty_value)),
+                    torch.zeros_like(tp)),
+    )
+    return _reduce(per_sample, reduction)

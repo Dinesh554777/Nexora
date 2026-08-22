@@ -17,7 +17,13 @@ sys.path.insert(0, _ROOT)
 
 import torch  # noqa: E402
 
-from ml.metrics import dice_loss, dice_score, iou_score  # noqa: E402
+from ml.metrics import (  # noqa: E402
+    dice_loss,
+    dice_score,
+    iou_score,
+    precision_score,
+    recall_score,
+)
 
 
 def mask_from_coords(shape, coords):
@@ -141,6 +147,30 @@ def test_gradient_flows_through_loss():
     assert logits.grad is not None and torch.isfinite(logits.grad).all()
 
 
+def test_precision_recall():
+    # asymmetric overlap: GT 100 px, pred 60 px, inter 40
+    gt = mask_from_coords((1, 32, 32), [(4, 14, 4, 14)])
+    pred = mask_from_coords((1, 32, 32), [(4, 10, 9, 15)])   # rows 4-9 x cols 9-15
+    inter = float(((pred > 0.5) & (gt > 0.5)).sum())
+    n_pred, n_gt = float((pred > 0.5).sum()), float((gt > 0.5).sum())
+    exp_p, exp_r = inter / n_pred, inter / n_gt
+    assert abs(precision_score(pred, gt).item() - exp_p) < 1e-7
+    assert abs(recall_score(pred, gt).item() - exp_r) < 1e-7
+
+    g2 = mask_from_coords((1, 32, 32), [(2, 10, 2, 10)])
+    p2 = mask_from_coords((1, 32, 32), [(20, 28, 20, 28)])
+    assert precision_score(p2, g2).item() == 0.0
+    assert recall_score(p2, g2).item() == 0.0
+
+    empty = torch.zeros(1, 32, 32)
+    assert precision_score(empty, empty).item() == 1.0     # both empty -> agree
+    assert recall_score(empty, empty).item() == 1.0
+    assert precision_score(mask_from_coords((1, 32, 32), [(3, 8, 3, 8)]), empty).item() == 0.0
+    assert recall_score(mask_from_coords((1, 32, 32), [(3, 8, 3, 8)]), empty).item() == 0.0
+    assert precision_score(empty, mask_from_coords((1, 32, 32), [(3, 8, 3, 8)])).item() == 0.0
+    assert recall_score(empty, mask_from_coords((1, 32, 32), [(3, 8, 3, 8)])).item() == 0.0
+
+
 def main() -> int:
     tests = [
         ("perfect", test_perfect_prediction),
@@ -152,6 +182,7 @@ def main() -> int:
         ("batch_consistency", test_batch_processing_matches_single_samples),
         ("numerical_outputs", test_returns_numerical_values_and_shapes),
         ("loss_gradients_finite", test_gradient_flows_through_loss),
+        ("precision_recall", test_precision_recall),
     ]
     failures = []
     for name, fn in tests:
