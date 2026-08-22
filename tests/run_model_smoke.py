@@ -16,10 +16,11 @@ import torch
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(_ROOT, "src"))
+sys.path.insert(0, _ROOT)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from nexora.data import PairSlicesDataset  # noqa: E402
-from nexora.models import UNet2D, count_parameters  # noqa: E402
+from ml.models import UNet2D, count_parameters  # noqa: E402
 from nexora.preprocessing import PreprocessConfig, preprocess_slice  # noqa: E402
 
 from fixtures import MENISCUS_LABEL, write_fixtures  # noqa: E402
