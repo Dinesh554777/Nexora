@@ -31,10 +31,13 @@ class Settings(BaseModel):
     # CORS Settings for local development
     ALLOWED_ORIGINS: list[str] = [
         "http://localhost:3000",
+        "http://localhost:3001",
         "http://localhost:5173",
         "http://127.0.0.1:3000",
+        "http://127.0.0.1:3001",
         "http://127.0.0.1:5173",
     ]
+    CORS_ALLOW_LOCALHOST_REGEX: str = r"https?://(localhost|127\.0\.0\.1):(3000|3001|5173)"
 
     # File Upload Configuration
     MAX_UPLOAD_SIZE_MB: int = 10

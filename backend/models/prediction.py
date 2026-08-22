@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import DateTime, Float, Integer, JSON, String, Text, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import DateTime, ForeignKey, Float, Integer, JSON, String, Text, func
+from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from database.base import Base
 
@@ -19,6 +19,12 @@ class Prediction(Base):
 
     id: Mapped[int] = mapped_column(
         Integer, primary_key=True, autoincrement=True
+    )
+    analysis_id: Mapped[int | None] = mapped_column(
+        Integer,
+        ForeignKey("analyses.id"),
+        nullable=True,
+        index=True,
     )
     status: Mapped[str] = mapped_column(
         String(16), nullable=False, index=True
@@ -41,6 +47,7 @@ class Prediction(Base):
         JSON, nullable=True
     )
     error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
+    analysis: Mapped["Analysis | None"] = relationship(back_populates="predictions")
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
