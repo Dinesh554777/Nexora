@@ -1,0 +1,5 @@
+implant_id,implant_size,femur_width,femur_ap,tibia_width,tibia_ap
+IMP-S,Small,65,58,68,44
+IMP-M,Medium,68,61,71,46
+IMP-L,Large,71,64,74,48
+IMP-XL,Extra Large,74,67,77,50
