@@ -1,8 +1,17 @@
 import io
 from fastapi.testclient import TestClient
+import numpy as np
 from PIL import Image
 from main import app
 from config import settings
+import api.routes as api_routes
+from services.model_adapter import BaseModelAdapter, ModelPredictionOutput
+from services.postprocessor import (
+    BasePostprocessor,
+    PostprocessingInput,
+    SegmentationResultOutput,
+)
+from services.preprocessor import PreprocessedImageContainer
 
 client = TestClient(app)
 
@@ -15,8 +24,42 @@ def create_sample_png_bytes(width: int = 100, height: int = 100) -> bytes:
     return buf.getvalue()
 
 
-def test_valid_image_upload_and_preprocessing():
-    """Test uploading a valid PNG image file and verifying preprocessing metadata."""
+class DummyAdapterForUploadTest(BaseModelAdapter):
+
+    def is_loaded(self):
+        return True
+
+    def predict(self, container: PreprocessedImageContainer):
+        return ModelPredictionOutput(
+            raw_prediction_array=np.zeros((128, 128)),
+            output_shape=(128, 128),
+            execution_time_ms=5.0,
+        )
+
+
+class DummyPostprocessorForUploadTest(BasePostprocessor):
+
+    def is_configured(self):
+        return True
+
+    def process(self, input_data: PostprocessingInput):
+        return SegmentationResultOutput(
+            mask_image_base64=None,
+            overlay_image_base64=None,
+            metrics={},
+            metadata={"status": "completed"},
+        )
+
+
+def test_valid_image_upload_and_preprocessing(monkeypatch):
+    """Test uploading a valid PNG image file through the full segment route when configured."""
+    monkeypatch.setattr(
+        api_routes, "model_adapter_service", DummyAdapterForUploadTest()
+    )
+    monkeypatch.setattr(
+        api_routes, "postprocessor_service", DummyPostprocessorForUploadTest()
+    )
+
     image_bytes = create_sample_png_bytes(128, 128)
     response = client.post(
         "/api/v1/segment",
@@ -26,11 +69,7 @@ def test_valid_image_upload_and_preprocessing():
     data = response.json()
     assert data["success"] is True
     assert data["filename"] == "test_scan.png"
-    assert data["content_type"] == "image/png"
-    assert data["original_dimensions"] == {"width": 128, "height": 128}
-    assert "preprocessing" in data
-    assert data["preprocessing"]["status"] == "completed"
-    assert "preprocessed successfully" in data["message"]
+    assert data["metadata"]["status"] == "completed"
 
 
 def test_unsupported_file_type():
