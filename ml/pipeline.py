@@ -354,3 +354,105 @@ def analyze_meniscus(
             "spacing":      _spacing_to_dict(spacing),
         },
     }
+
+
+# ---------------------------------------------------------------------------
+# Backend-facing public adapter
+# ---------------------------------------------------------------------------
+
+def analyze_meniscus_for_backend(
+    image_path: str,
+    *,
+    out_dir: str = _DEFAULT_OUT_DIR,
+    checkpoint_path: str = DEFAULT_CHECKPOINT,
+    device: str | None = None,
+    predictor: MeniscusPredictor | None = None,
+) -> dict[str, Any]:
+    """Backend integration entry point — wraps :func:`analyze_meniscus`.
+
+    Returns a JSON-serialisable dict whose shape exactly matches the
+    contract agreed with the FastAPI team:
+
+    .. code-block:: json
+
+        {
+            "status": "success",
+            "model_version": "unet2d-base16-depth4-epoch10",
+            "measurements": {
+                "anterior":  {"value": 1.44, "unit": "mm"},
+                "middle":    {"value": 2.70, "unit": "mm"},
+                "posterior": {"value": 2.16, "unit": "mm"}
+            },
+            "segmentation": {
+                "mask_path": "/abs/path/to/subject_pred_mask.nii.gz"
+            },
+            "visualization": {
+                "overlay_path": "/abs/path/to/subject_overlay.png"
+            }
+        }
+
+    On any error the dict has ``"status": "error"`` and an ``"error"``
+    key with a human-readable message; no exception is raised so the
+    FastAPI layer can return a structured HTTP error without a try/except.
+
+    Unit policy
+    -----------
+    ``"unit"`` is ``"mm"`` when physical spacing is available from the
+    NIfTI header, and ``"voxels"`` otherwise.  The value is ``null``
+    when the measurement could not be computed (empty mask, too few
+    slices, etc.) and ``status`` is set to ``"partial"`` in that case.
+
+    Parameters
+    ----------
+    image_path : str
+        Path to a ``.nii`` / ``.nii.gz`` MRI file.
+    out_dir : str
+        Directory for output files (mask NIfTI, overlay PNG).
+    checkpoint_path : str
+        Path to ``best_model.pth``.
+    device : str | None
+        ``"cpu"``, ``"cuda"``, or ``None`` (auto-detect).
+    predictor : MeniscusPredictor | None
+        Pre-loaded predictor instance for model-caching across requests.
+    """
+    try:
+        raw = analyze_meniscus(
+            image_path,
+            out_dir=out_dir,
+            checkpoint_path=checkpoint_path,
+            device=device,
+            predictor=predictor,
+        )
+    except FileNotFoundError as exc:
+        return {"status": "error", "error": f"file not found: {exc}"}
+    except ValueError as exc:
+        return {"status": "error", "error": f"invalid input: {exc}"}
+    except RuntimeError as exc:
+        return {"status": "error", "error": f"pipeline error: {exc}"}
+    except Exception as exc:  # noqa: BLE001
+        return {"status": "error", "error": f"unexpected error: {exc}"}
+
+    # --- shape measurements into the exact schema the backend expects ---
+    measurements: dict[str, Any] = {}
+    any_null = False
+    for region in ("anterior", "middle", "posterior"):
+        entry = raw["measurements"].get(region, {})
+        value = entry.get("value")      # float | None
+        unit  = entry.get("unit", "voxels")
+        measurements[region] = {"value": value, "unit": unit}
+        if value is None:
+            any_null = True
+
+    status = "partial" if any_null else "success"
+
+    return {
+        "status":        status,
+        "model_version": raw["model_version"],
+        "measurements":  measurements,
+        "segmentation": {
+            "mask_path": raw["segmentation"]["mask_path"],
+        },
+        "visualization": {
+            "overlay_path": raw["visualization"]["overlay_path"],
+        },
+    }
