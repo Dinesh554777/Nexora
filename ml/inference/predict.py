@@ -138,10 +138,10 @@ class MeniscusPredictor:
         mask = np.zeros(orig_shape, dtype=np.uint8)   # original resolution
         for z in range(probs_np.shape[0]):
             bin_small = (probs_np[z] >= self.threshold).astype(np.uint8)
-            mask[:, :, z] = np.moveaxis(
-                self._postprocess_slice(bin_small, min_area,
-                                        (orig_shape[0], orig_shape[1])),
-                0, 1)
+            # _postprocess_slice already returns (H, W) rows x cols aligned
+            # with the input slice - no axis juggling needed here.
+            mask[:, :, z] = self._postprocess_slice(
+                bin_small, min_area, (orig_shape[0], orig_shape[1]))
 
         return {
             "mask": mask,                                        # uint8 {0,1}, input resolution
