@@ -70,18 +70,59 @@ src/
 
 ## Development Notes
 
-This is Phase 1 of the KneeVision AI hackathon project. The current implementation includes:
+This project has completed all phases:
 
-- ✅ Complete frontend foundation with responsive design
+- ✅ Phase 0: Project setup and configuration
+- ✅ Phase 1: Complete frontend foundation with responsive design
+- ✅ Phase 2: Backend API integration with ML-powered features
+- ✅ Phase 3: Clinical workflow & hackathon polish
+- ✅ Phase 4: AI explainability & clinical decision support
 - ✅ Professional medical-grade UI/UX
-- ✅ Demo data for visualization and testing
-- ✅ Component architecture ready for API integration
+- ✅ Real-time API integration
+- ✅ ML-based implant matching algorithm
+- ✅ Comprehensive OA analytics with explainability
+- ✅ Component architecture with full API integration
+- ✅ CORS configured for development (all localhost ports supported)
 
-Future phases will include:
-- Backend API integration
-- Machine learning model integration
-- Real-time image analysis
-- Patient data management system
+### Running the Full Application
+
+**Start Backend (Terminal 1):**
+```bash
+cd backend
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Start Frontend (Terminal 2):**
+```bash
+npm run dev
+```
+
+Visit the URL shown in the terminal (typically `http://localhost:5173/` or similar)
+
+API Documentation: `http://localhost:8000/docs`
+
+**⚠️ Important:** The backend CORS is configured to accept requests from any localhost port using regex pattern. This means the frontend can run on any port (5173, 5174, 5175, 5176, etc.) without CORS issues.
+
+**Quick Start:** See [QUICK_START.md](./QUICK_START.md) for instant setup  
+**Full Guide:** See [DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md) for comprehensive documentation
+
+## Phase 2 Features
+
+### Backend API
+- **FastAPI** server with 4 endpoints
+- **ML Algorithm**: Euclidean distance-based implant matching
+- **OA Analytics**: Comprehensive patient statistics
+- **Data Models**: 15 demo patients, 5 reference implants
+- **CORS**: Configured for local development
+
+### Frontend Integration
+- **API Service Layer**: Centralized, typed API calls
+- **Real-time Data**: Dashboard and analytics from live API
+- **Form Validation**: Client-side validation before API calls
+- **Error Handling**: Professional error messages and retry logic
+- **Loading States**: Skeleton loaders and progress indicators
+
+See [INTEGRATION.md](./INTEGRATION.md) for complete Phase 2 documentation.
 
 ## License
 

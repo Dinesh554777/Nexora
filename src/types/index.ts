@@ -37,3 +37,49 @@ export interface PatientMeasurements {
   tibiaWidth: number;
   tibiaAP: number;
 }
+
+// Medical Imaging Types
+export interface UploadedImage {
+  id: string;
+  file: File;
+  preview: string;
+  type: 'xray' | 'mri';
+  uploadedAt: Date;
+}
+
+export interface ImageAnalysisResult {
+  imageId: string;
+  findings: string[];
+  confidence: number;
+  abnormalRegions: Array<{
+    region: string;
+    description: string;
+    severity: 'low' | 'medium' | 'high';
+  }>;
+  measurements?: {
+    meniscusThickness?: number;
+    jointSpaceWidth?: number;
+  };
+  oaIndicators?: {
+    present: boolean;
+    severity: 'none' | 'mild' | 'moderate' | 'severe';
+    observations: string[];
+  };
+  timestamp: Date;
+}
+
+export type AnalysisState = 'ready' | 'uploading' | 'processing' | 'complete' | 'failed';
+
+// Export Types
+export interface ExportData {
+  patientInfo?: {
+    patientId?: string;
+    age?: string;
+    sex?: string;
+  };
+  measurements?: PatientMeasurements;
+  recommendation?: ImplantRecommendation;
+  alternatives?: ImplantRecommendation[];
+  imageAnalysis?: ImageAnalysisResult[];
+  timestamp: Date;
+}

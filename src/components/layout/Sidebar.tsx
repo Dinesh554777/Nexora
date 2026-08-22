@@ -1,10 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Ruler, BarChart3, Settings } from 'lucide-react';
+import { LayoutDashboard, Ruler, Image, BarChart3, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Implant Sizing', href: '/implant-sizing', icon: Ruler },
+  { name: 'Medical Imaging', href: '/medical-imaging', icon: Image },
   { name: 'OA Analytics', href: '/oa-analytics', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
