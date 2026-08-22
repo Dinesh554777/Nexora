@@ -7,6 +7,15 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     debug=settings.DEBUG,
+    description=(
+        "Backend API for medical image segmentation.\n\n"
+        "Capabilities:\n"
+        "- Image upload validation (type, size, integrity, dimensions)\n"
+        "- Preprocessing pipeline (resize, color conversion, normalization)\n"
+        "- Model inference via pluggable adapter layer\n"
+        "- Segmentation result generation via postprocessing layer\n\n"
+        "Interactive documentation: `/docs` | OpenAPI schema: `/openapi.json`"
+    ),
 )
 
 # Configure CORS for local development

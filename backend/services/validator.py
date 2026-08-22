@@ -56,4 +56,11 @@ async def validate_image_upload(file: UploadFile) -> tuple[bytes, tuple[int, int
             detail="Invalid or corrupted image file.",
         )
 
+    max_dim = settings.MAX_IMAGE_DIMENSION_PX
+    if max_dim > 0 and (dimensions[0] > max_dim or dimensions[1] > max_dim):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Image dimensions exceed the maximum allowed limit of {max_dim}x{max_dim} pixels.",
+        )
+
     return contents, dimensions

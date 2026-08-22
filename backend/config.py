@@ -2,10 +2,17 @@ import os
 from pydantic import BaseModel
 
 
+def _env_flag(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
 class Settings(BaseModel):
     APP_NAME: str = "Nexora Backend API"
     APP_VERSION: str = "0.1.0"
-    DEBUG: bool = True
+    DEBUG: bool = _env_flag("DEBUG", False)
 
     # CORS Settings for local development
     ALLOWED_ORIGINS: list[str] = [
@@ -17,6 +24,9 @@ class Settings(BaseModel):
 
     # File Upload Configuration
     MAX_UPLOAD_SIZE_MB: int = 10
+    MAX_IMAGE_DIMENSION_PX: int = int(
+        os.getenv("MAX_IMAGE_DIMENSION_PX", "10000")
+    )
     ALLOWED_IMAGE_TYPES: set[str] = {
         "image/jpeg",
         "image/jpg",
