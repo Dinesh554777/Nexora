@@ -40,6 +40,7 @@ from torch.utils.data import DataLoader, Dataset  # noqa: E402
 from ml.metrics import dice_loss, dice_score, iou_score  # noqa: E402
 from ml.models import UNet2D  # noqa: E402
 from nexora.data import PairSlicesDataset, discover_pairs  # noqa: E402
+from nexora.data.splitting import extract_subject_id  # noqa: E402
 from nexora.preprocessing import PreprocessConfig, preprocess_slice  # noqa: E402
 
 from fixtures import MENISCUS_LABEL, write_fixtures  # noqa: E402
