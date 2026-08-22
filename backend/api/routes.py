@@ -2,6 +2,7 @@ import logging
 
 from fastapi import APIRouter, File, HTTPException, UploadFile, status
 from config import settings
+from database.connection import check_database_connection
 from services.model_adapter import (
     ModelNotAvailableError,
     model_adapter_service,
@@ -12,6 +13,10 @@ from services.postprocessor import (
     postprocessor_service,
 )
 from services.preprocessor import preprocessor_service
+from services.persistence import (
+    persist_prediction_failure,
+    persist_prediction_success,
+)
 from services.validator import validate_image_upload
 
 logger = logging.getLogger(__name__)
@@ -30,6 +35,29 @@ async def health_check():
         "status": "healthy",
         "app_name": settings.APP_NAME,
         "version": settings.APP_VERSION,
+    }
+
+
+@router.get(
+    "/health/db",
+    tags=["system"],
+    summary="Database connectivity check",
+    response_description="Truthful PostgreSQL connectivity status.",
+)
+async def database_health_check():
+    """Reports real database connectivity without exposing credentials.
+
+    Never returns DATABASE_URL, passwords, or internal error details.
+    """
+    configured = bool(settings.DATABASE_URL and settings.DATABASE_URL.strip())
+    ok, detail = check_database_connection()
+    return {
+        "status": "ok" if ok else "unavailable",
+        "database": {
+            "configured": configured,
+            "connected": ok,
+            "detail": detail,
+        },
     }
 
 
@@ -93,6 +121,13 @@ async def segment_image(file: UploadFile = File(...)):
     try:
         prediction = model_adapter_service.predict(container)
     except ModelNotAvailableError as e:
+        persist_prediction_failure(
+            original_filename=file.filename,
+            image_width=orig_w,
+            image_height=orig_h,
+            stage="inference",
+            error=e,
+        )
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=str(e),
@@ -101,6 +136,13 @@ async def segment_image(file: UploadFile = File(...)):
         raise
     except Exception as e:
         logger.exception("Model inference failure")
+        persist_prediction_failure(
+            original_filename=file.filename,
+            image_width=orig_w,
+            image_height=orig_h,
+            stage="inference",
+            error=e,
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Model inference processing failed.",
@@ -113,6 +155,13 @@ async def segment_image(file: UploadFile = File(...)):
         )
         result = postprocessor_service.process(post_input)
     except PostprocessingNotConfiguredError as e:
+        persist_prediction_failure(
+            original_filename=file.filename,
+            image_width=orig_w,
+            image_height=orig_h,
+            stage="postprocessing",
+            error=e,
+        )
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=str(e),
@@ -121,12 +170,41 @@ async def segment_image(file: UploadFile = File(...)):
         raise
     except Exception as e:
         logger.exception("Postprocessing failure")
+        persist_prediction_failure(
+            original_filename=file.filename,
+            image_width=orig_w,
+            image_height=orig_h,
+            stage="postprocessing",
+            error=e,
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Postprocessing result generation failed.",
         ) from e
 
-    # 5. Structured JSON API Response
+    # 5. Persist prediction metadata to PostgreSQL (best-effort, never masks
+    #    an already-successful result; failures are logged server-side).
+    raw_execution_time = getattr(prediction, "execution_time_ms", None)
+    execution_time_ms = (
+        float(raw_execution_time)
+        if isinstance(raw_execution_time, (int, float))
+        else None
+    )
+    prediction_id = persist_prediction_success(
+        original_filename=file.filename,
+        image_width=orig_w,
+        image_height=orig_h,
+        metrics=result.metrics,
+        metadata=result.metadata,
+        execution_time_ms=execution_time_ms,
+    )
+    if prediction_id is None:
+        logger.warning(
+            "Segmentation succeeded but the prediction record was not "
+            "persisted (database unavailable or not configured)."
+        )
+
+    # 6. Structured JSON API Response
     return {
         "success": True,
         "filename": file.filename,

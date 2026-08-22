@@ -13,6 +13,7 @@ This document describes the API **exactly as implemented** in `backend/`.
 |--------|------|---------|
 | GET | `/` | Welcome message with links to docs and health |
 | GET | `/health` | Health check |
+| GET | `/health/db` | PostgreSQL connectivity check |
 | POST | `/api/v1/segment` | Segment an uploaded image |
 
 ## 2. `GET /`
@@ -39,7 +40,34 @@ Response `200`:
 }
 ```
 
-## 4. `POST /api/v1/segment`
+## 4. `GET /health/db`
+
+Reports truthful database connectivity. Never returns `DATABASE_URL`,
+passwords, or internal error details.
+
+Response when connected (`200`):
+
+```json
+{
+  "status": "ok",
+  "database": { "configured": true, "connected": true, "detail": "database connection ok" }
+}
+```
+
+Response when PostgreSQL is unreachable or `DATABASE_URL` is unset (`200`, honest status):
+
+```json
+{
+  "status": "unavailable",
+  "database": {
+    "configured": false,
+    "connected": false,
+    "detail": "DATABASE_URL is not configured. Set it via the environment or backend/.env (see backend/.env.example)."
+  }
+}
+```
+
+## 5. `POST /api/v1/segment`
 
 ### Request format
 
@@ -67,6 +95,12 @@ Files must also pass PIL integrity verification.
 2. **Preprocessing** — color conversion, bilinear resize to `(256, 256)` (temporary defaults), float32 `[0,1]` normalization (`services/preprocessor.py`)
 3. **Model inference** — via registered adapter (`services/model_adapter.py`)
 4. **Postprocessing** — result generation (`services/postprocessor.py`)
+5. **Persistence** — one committed `predictions` row in PostgreSQL (`services/persistence.py`): `success` after the full pipeline, or `failed` (sanitized stage + exception class name) when inference/postprocessing raised. Validation/preprocessing rejections are never persisted.
+
+Persistence is best-effort: a database failure after successful inference is
+logged server-side and reported via `/health/db` but never masks an
+already-computed result, and no partial or invalid records are ever created
+(single-row transactions).
 
 ### Successful response — `200`
 
@@ -109,13 +143,15 @@ Unexpected exceptions are logged server-side only.
 | 503 | Model adapter not loaded (`ModelNotAvailableError`) or postprocessor not configured (`PostprocessingNotConfiguredError`) |
 | 500 | Unexpected preprocessing / inference / postprocessing failure |
 
-## 5. Configuration / environment variables
+## 6. Configuration / environment variables
 
 | Variable | Default | Effect |
 |----------|---------|--------|
 | `DEBUG` | `false` | FastAPI debug mode; `true` exposes tracebacks — never enable in demos |
 | `MAX_IMAGE_DIMENSION_PX` | `10000` | Rejects images whose declared width or height exceeds this |
 | `MODEL_WEIGHTS_PATH` | unset | Where the future model adapter will load weights from |
+| `DATABASE_URL` | unset | PostgreSQL connection string (SQLAlchemy format). Required for persistence and migrations; app boots without it, persistence is skipped with a server-side warning. Treated as a secret: never logged or returned by any endpoint. Password special characters must be percent-encoded (`@` → `%40`). |
+| `NEXORA_API_KEY` | unset | Secret key for future external ML/API integration. Loaded from env or `backend/.env` (template: `.env.example`). Held as `SecretStr`; never logged. App starts without it — access via `settings.require_api_key()` raises a clear error when an integration needs it. |
 
 Non-env settings (edit `config.py`): upload limits, allowed types, CORS origins
 (currently `localhost:3000`/`:5173`), preprocessing parameters
@@ -124,7 +160,7 @@ Non-env settings (edit `config.py`): upload limits, allowed types, CORS origins
 
 No secrets are required or hardcoded.
 
-## 6. Model requirements
+## 7. Model requirements
 
 - **Framework:** not chosen yet — no ML dependency installed.
 - **Weights:** none present in the repository.
@@ -137,7 +173,91 @@ No secrets are required or hardcoded.
   (`process(PostprocessingInput) -> SegmentationResultOutput`, `is_configured()`),
   load weights once at construction.
 
-## 7. Local development
+## 8. PostgreSQL database
+
+The backend persists segmentation metadata in PostgreSQL via SQLAlchemy 2.0
+(`database/`, `models/prediction.py`) with Alembic migrations (`migrations/`).
+Driver: `psycopg` 3 (installed with the `[binary]` extra via `requirements.txt`).
+
+### 8.1 Required environment variables
+
+Set `DATABASE_URL` in `backend/.env` (gitignored; template: `.env.example`):
+
+```env
+DATABASE_URL=postgresql+psycopg://username:password@localhost:5432/nexora
+```
+
+Never commit real credentials anywhere. Percent-encode special characters in
+the password (`@` → `%40`, etc.).
+
+### 8.2 Create the Nexora database (once)
+
+Using psql (adjust paths/credentials for your install):
+
+```bash
+psql -U postgres -h localhost -c "CREATE DATABASE nexora;"
+```
+
+or from pgAdmin: right-click Databases → Create → Database… → `nexora`.
+
+Optionally create a dedicated least-privilege role instead of reusing a
+superuser:
+
+```sql
+CREATE ROLE nexora_app LOGIN PASSWORD '<choose-a-strong-password>';
+GRANT ALL PRIVILEGES ON DATABASE nexora TO nexora_app;
+```
+
+### 8.3 Run migrations
+
+All commands run from `backend/`. Alembic reads `DATABASE_URL` from
+`backend/.env` automatically (`migrations/env.py`).
+
+```bash
+python -m alembic upgrade head        # apply all pending migrations
+python -m alembic current             # show applied revision
+python -m alembic downgrade -1        # revert last migration
+python -m alembic downgrade base      # drop all schema (destructive)
+python -m alembic revision --autogenerate -m "message"   # new migration after model changes
+```
+
+Current revisions:
+
+| Revision | Migration |
+|----------|-----------|
+| `0001` | create `predictions` table (+ `ix_predictions_status` index) |
+
+Note: tests create throwaway SQLite schemas directly and do not use Alembic;
+`Base.metadata.create_all()` is never used outside the test suite.
+
+### 8.4 Schema — `predictions` table
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | INTEGER PK | autoincrement |
+| status | VARCHAR(16) | `success` / `failed`, indexed |
+| original_filename | VARCHAR(512) | truncated client-supplied name |
+| image_width / image_height | INTEGER | original pixel dimensions |
+| model_name | VARCHAR(128) | reserved for future registered adapters |
+| execution_time_ms | FLOAT | inference time when available |
+| metrics_json / metadata_json | JSON | postprocessor outputs |
+| error_message | TEXT | sanitized `stage: ExceptionClass` on failures only |
+| created_at / updated_at | TIMESTAMPTZ | server defaults |
+
+Mask/overlay pixels are intentionally NOT stored as blobs (they are returned
+inline by the API). If object/file storage is added later, reference columns
+belong here — discuss before introducing large binary fields.
+
+### 8.5 Verify connectivity
+
+```bash
+curl http://127.0.0.1:8000/health/db
+```
+
+`{"status": "ok", ...}` means PostgreSQL accepts connections. Failures return
+honest status without credentials or internal details.
+
+## 9. Local development
 
 ```bash
 cd backend
@@ -151,14 +271,14 @@ Run tests:
 python -m pytest -v
 ```
 
-## 8. Example request
+## 10. Example request
 
 ```bash
 curl -X POST http://127.0.0.1:8000/api/v1/segment \
   -F "file=@knee_scan.png;type=image/png"
 ```
 
-## 9. Example responses
+## 11. Example responses
 
 Current real behavior (model pending) — `503`:
 
