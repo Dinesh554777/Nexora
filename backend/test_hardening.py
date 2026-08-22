@@ -160,7 +160,8 @@ def test_normal_dimensions_pass_guard(monkeypatch):
         },
     )
 
-    assert response.status_code == 503
+    assert response.status_code == 200
+    assert response.json()["success"] is True
 
 
 @pytest.mark.parametrize("limit", [0, -5])
@@ -177,4 +178,5 @@ def test_non_positive_dimension_limit_disables_guard(monkeypatch, limit):
         },
     )
 
-    assert response.status_code == 503
+    assert response.status_code == 200
+    assert response.json()["success"] is True

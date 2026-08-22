@@ -11,6 +11,8 @@ def test_health_check():
     assert data["status"] == "healthy"
     assert data["app_name"] == "Nexora Backend API"
     assert "version" in data
+    assert "model" in data
+    assert "ready" in data["model"]
 
 
 def test_root_endpoint():

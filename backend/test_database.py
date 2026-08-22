@@ -297,7 +297,8 @@ def test_segmentation_api_persists_prediction_record(
         assert record.image_height == 100
         assert record.execution_time_ms == 12.5
         assert record.metrics_json == {"segmented_area_pixels": 150}
-        assert record.metadata_json == {"status": "processed"}
+        assert record.metadata_json["status"] == "processed"
+        assert record.metadata_json["specification_status"] == "TEMPORARY — PENDING ML SPECIFICATION"
         assert record.error_message is None
 
 

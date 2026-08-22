@@ -5,11 +5,15 @@ from config import settings
 from database.connection import check_database_connection
 from services.model_adapter import (
     ModelNotAvailableError,
+    PendingModelAdapter,
+    UNetModelAdapter,
     model_adapter_service,
 )
 from services.postprocessor import (
     PostprocessingInput,
     PostprocessingNotConfiguredError,
+    PendingPostprocessor,
+    UNetPostprocessor,
     postprocessor_service,
 )
 from services.preprocessor import preprocessor_service
@@ -22,19 +26,58 @@ from services.validator import validate_image_upload
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+DEFAULT_MODEL_ADAPTER = model_adapter_service
+DEFAULT_POSTPROCESSOR = postprocessor_service
+_live_model_adapter = None
+_live_postprocessor = None
+
+
+def _resolve_live_model_adapter():
+    global _live_model_adapter
+    current = model_adapter_service
+    if isinstance(current, PendingModelAdapter):
+        if current is DEFAULT_MODEL_ADAPTER:
+            if _live_model_adapter is None or not _live_model_adapter.is_loaded():
+                _live_model_adapter = UNetModelAdapter()
+            return _live_model_adapter
+        return current
+    return current
+
+
+def _resolve_live_postprocessor():
+    global _live_postprocessor
+    current = postprocessor_service
+    if isinstance(current, PendingPostprocessor):
+        if current is DEFAULT_POSTPROCESSOR:
+            if _live_postprocessor is None or not _live_postprocessor.is_configured():
+                _live_postprocessor = UNetPostprocessor()
+            return _live_postprocessor
+        return current
+    return current
+
 
 @router.get(
     "/health",
     tags=["system"],
     summary="Health check",
-    response_description="Backend status, application name, and version.",
+    response_description="Backend status, application name, version, and model readiness.",
 )
 async def health_check():
-    """Returns static health status for load balancers and monitoring."""
+    """Returns service health and whether the live model adapter is ready."""
+    try:
+        live_model = _resolve_live_model_adapter()
+        model_ready = bool(live_model.is_loaded())
+    except Exception:
+        model_ready = False
+
     return {
         "status": "healthy",
         "app_name": settings.APP_NAME,
         "version": settings.APP_VERSION,
+        "model": {
+            "ready": model_ready,
+            "adapter": type(_resolve_live_model_adapter()).__name__ if model_ready else type(model_adapter_service).__name__,
+        },
     }
 
 
@@ -119,7 +162,8 @@ async def segment_image(file: UploadFile = File(...)):
 
     # 3. Model Adapter Inference Layer
     try:
-        prediction = model_adapter_service.predict(container)
+        active_model_adapter = _resolve_live_model_adapter()
+        prediction = active_model_adapter.predict(container)
     except ModelNotAvailableError as e:
         persist_prediction_failure(
             original_filename=file.filename,
@@ -150,10 +194,11 @@ async def segment_image(file: UploadFile = File(...)):
 
     # 4. Postprocessing & Result Generation Layer
     try:
+        active_postprocessor = _resolve_live_postprocessor()
         post_input = PostprocessingInput(
             prediction=prediction, container=container
         )
-        result = postprocessor_service.process(post_input)
+        result = active_postprocessor.process(post_input)
     except PostprocessingNotConfiguredError as e:
         persist_prediction_failure(
             original_filename=file.filename,
