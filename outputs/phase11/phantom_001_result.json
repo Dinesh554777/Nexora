@@ -1,0 +1,62 @@
+{
+  "subject_id": "phantom_001",
+  "model_version": "gt_mask_phase11_demo",
+  "spacing": {
+    "row_mm": 0.36000001430511475,
+    "col_mm": 0.36000001430511475,
+    "slice_mm": 0.699999988079071
+  },
+  "measurements": {
+    "anterior": {
+      "value": 2.16,
+      "unit": "mm",
+      "method": "Mask extent along slice_axis partitioned into thirds by active-slice index; per-slice thickness = median of maximum contiguous foreground run-lengths projected along the row axis; region thickness = median of per-slice values",
+      "status": "ok"
+    },
+    "middle": {
+      "value": 2.52,
+      "unit": "mm",
+      "method": "Mask extent along slice_axis partitioned into thirds by active-slice index; per-slice thickness = median of maximum contiguous foreground run-lengths projected along the row axis; region thickness = median of per-slice values",
+      "status": "ok"
+    },
+    "posterior": {
+      "value": 2.88,
+      "unit": "mm",
+      "method": "Mask extent along slice_axis partitioned into thirds by active-slice index; per-slice thickness = median of maximum contiguous foreground run-lengths projected along the row axis; region thickness = median of per-slice values",
+      "status": "ok"
+    }
+  },
+  "overlay_path": "C:\\Users\\hp\\Downloads\\Dinesh Projects\\Nexora\\outputs\\phase11\\phantom_001_overlay.png",
+  "source_image": "C:\\Users\\hp\\Downloads\\Dinesh Projects\\Nexora\\data\\fixtures_tmp\\images\\phantom_001.nii.gz",
+  "mask_source": "ground_truth",
+  "mask_foreground_voxels": 5289,
+  "measurement_lines": {
+    "anterior": {
+      "slice_index": 0,
+      "col": 42,
+      "row_start": 59,
+      "row_end": 64,
+      "thickness_vox": 6,
+      "thickness_value": 2.16,
+      "unit": "mm"
+    },
+    "middle": {
+      "slice_index": 16,
+      "col": 40,
+      "row_start": 61,
+      "row_end": 67,
+      "thickness_vox": 7,
+      "thickness_value": 2.52,
+      "unit": "mm"
+    },
+    "posterior": {
+      "slice_index": 34,
+      "col": 41,
+      "row_start": 64,
+      "row_end": 71,
+      "thickness_vox": 8,
+      "thickness_value": 2.88,
+      "unit": "mm"
+    }
+  }
+}
