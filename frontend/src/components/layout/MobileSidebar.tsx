@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Ruler, Image, History, BarChart3, Settings } from 'lucide-react';
+import { LayoutDashboard, Ruler, Image, History, BarChart3, Settings, FlaskConical } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 
@@ -9,6 +9,7 @@ const navigation = [
   { name: 'Medical Imaging', href: '/medical-imaging', icon: Image },
   { name: 'Progress View', href: '/progress-view', icon: History },
   { name: 'OA Analytics', href: '/oa-analytics', icon: BarChart3 },
+  { name: 'Demo Cases', href: '/demo-cases', icon: FlaskConical },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 

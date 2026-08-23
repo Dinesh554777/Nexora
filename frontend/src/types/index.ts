@@ -47,6 +47,20 @@ export interface UploadedImage {
   uploadedAt: Date;
 }
 
+export interface OAAssessment {
+  classification: 'OA' | 'NON_OA';
+  confidence: number;           // 0–1
+  severity: 'None' | 'Mild' | 'Moderate' | 'Severe';
+  findings: {
+    reduced_meniscal_signal: boolean;
+    meniscal_coverage_loss: boolean;
+    structural_irregularity: boolean;
+  };
+  notes: string;
+  source: string;
+  clinical_warning: string;
+}
+
 export interface ImageAnalysisResult {
   imageId: string;
   filename?: string;
@@ -61,11 +75,7 @@ export interface ImageAnalysisResult {
     meniscusThickness?: number;
     jointSpaceWidth?: number;
   };
-  oaIndicators?: {
-    present: boolean;
-    severity: 'none' | 'mild' | 'moderate' | 'severe';
-    observations: string[];
-  };
+  oaAssessment?: OAAssessment;
   originalImageBase64?: string;
   maskImageBase64?: string;
   overlayImageBase64?: string;

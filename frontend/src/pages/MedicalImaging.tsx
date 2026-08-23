@@ -67,6 +67,7 @@ export function MedicalImaging() {
 
           const response = await apiService.segmentImage(formData);
           const metrics = response.metrics ?? {};
+          const oaRaw = response.oa_assessment;
           const probabilityMean = typeof metrics.probability_mean === 'number'
             ? Number(metrics.probability_mean)
             : undefined;
@@ -87,18 +88,40 @@ export function MedicalImaging() {
             return value.startsWith('data:image') ? value : `data:image/png;base64,${value}`;
           };
 
+          // Build OA assessment from real backend response
+          const oaAssessment = oaRaw ? {
+            classification: oaRaw.classification as 'OA' | 'NON_OA',
+            confidence: oaRaw.confidence,
+            severity: oaRaw.severity as 'None' | 'Mild' | 'Moderate' | 'Severe',
+            findings: oaRaw.findings ?? {},
+            notes: oaRaw.notes ?? '',
+            source: oaRaw.source ?? 'unet_segmentation_metrics',
+            clinical_warning: oaRaw.clinical_warning ?? '',
+          } : undefined;
+
+          const isOA = oaAssessment?.classification === 'OA';
+
           const findings = [
             'The uploaded knee image was processed successfully by the Nexora AI segmentation pipeline.',
           ];
-
+          if (oaAssessment) {
+            findings.push(
+              isOA
+                ? `OA Assessment: Osteoarthritis features detected (confidence ${(oaAssessment.confidence * 100).toFixed(0)}%)`
+                : `OA Assessment: No OA features detected (confidence ${(oaAssessment.confidence * 100).toFixed(0)}%)`
+            );
+            if (oaAssessment.severity !== 'None') {
+              findings.push(`Severity: ${oaAssessment.severity}`);
+            }
+          }
           if (typeof probabilityMean === 'number') {
-            findings.push(`Probability Mean: ${probabilityMean.toFixed(4)}`);
+            findings.push(`Meniscal activation (probability mean): ${probabilityMean.toFixed(4)}`);
           }
           if (typeof maskAreaPixels === 'number') {
             findings.push(`Segmented region area: ${maskAreaPixels.toLocaleString()} pixels`);
           }
           if (typeof maskFraction === 'number') {
-            findings.push(`Mask fraction: ${(maskFraction * 100).toFixed(2)}%`);
+            findings.push(`Meniscal coverage: ${(maskFraction * 100).toFixed(2)}%`);
           }
 
           return {
@@ -109,6 +132,7 @@ export function MedicalImaging() {
               ? Math.max(0, Math.min(100, Math.round(probabilityMean * 100)))
               : 95,
             abnormalRegions: [],
+            oaAssessment,
             originalImageBase64: image.preview,
             maskImageBase64: normalizeBase64(response.mask_image_base64),
             overlayImageBase64: normalizeBase64(response.overlay_image_base64),

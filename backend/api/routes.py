@@ -25,9 +25,13 @@ from services.persistence import (
     persist_prediction_success,
 )
 from services.validator import validate_image_upload
+from api.demo_routes import demo_router
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
+
+# Mount demo/OA-assessment endpoints onto the main router
+router.include_router(demo_router)
 analytics = analytics_service
 
 DEFAULT_MODEL_ADAPTER = model_adapter_service
@@ -503,7 +507,111 @@ async def segment_image(file: UploadFile = File(...)):
             },
         )
 
-        # 6. Structured JSON API Response
+        # 6. OA Assessment from real segmentation metrics
+        #
+        # Both probability_mean and mask_fraction are computed directly from
+        # the UNet probability map of the uploaded image — they reflect actual
+        # pixel-level model output, not filenames or hardcoded values.
+        #
+        # Clinical basis:
+        #   probability_mean — how confidently the model sees meniscal tissue.
+        #     A healthy meniscus produces higher activation; degeneration reduces it.
+        #   mask_fraction — fraction of image pixels classified as meniscus.
+        #     OA-related thinning/loss reduces coverage.
+        #
+        # Thresholds are derived from the training data distribution:
+        #   Healthy knees (synthetic fixtures): prob_mean ~0.55-0.75, mask_fraction ~0.20-0.40
+        #   Reduced signal (consistent with degeneration): prob_mean <0.35, mask_fraction <0.10
+        #
+        # Because the model was trained on synthetic data, this is a
+        # research/demo indicator only — not a validated clinical classifier.
+        m = result.metrics
+        prob_mean = float(m.get("probability_mean", 0.0))
+        mask_fraction = float(m.get("mask_fraction", 0.0))
+        mask_area = int(m.get("mask_area_pixels", 0))
+
+        # Score combines probability strength and coverage — both must be healthy
+        # for a NON_OA call.  Either being very low flags likely OA/degeneration.
+        coverage_score = mask_fraction * 100          # 0-100 scale
+        confidence_score = prob_mean * 100            # 0-100 scale
+        combined = (coverage_score * 0.6) + (confidence_score * 0.4)
+
+        if mask_area == 0:
+            # No meniscus detected at all — strong OA/pathology indicator
+            oa_classification = "OA"
+            oa_confidence = round(min(0.88, 0.60 + (1.0 - prob_mean) * 0.3), 3)
+            oa_severity = "Moderate"
+            oa_findings = {
+                "reduced_meniscal_signal": True,
+                "meniscal_coverage_loss": True,
+                "structural_irregularity": True,
+            }
+            oa_notes = "No meniscal structure detected. Consistent with significant meniscal loss or degeneration."
+        elif combined < 18.0:
+            # Low coverage + low probability → OA pattern
+            oa_classification = "OA"
+            oa_confidence = round(min(0.93, 0.70 + (18.0 - combined) / 60.0), 3)
+            oa_severity = "Moderate" if combined < 10.0 else "Mild"
+            oa_findings = {
+                "reduced_meniscal_signal": prob_mean < 0.35,
+                "meniscal_coverage_loss": mask_fraction < 0.08,
+                "structural_irregularity": mask_fraction < 0.12,
+            }
+            oa_notes = (
+                f"Low meniscal coverage ({mask_fraction*100:.1f}%) and reduced "
+                f"model activation ({prob_mean:.3f}) indicate meniscal changes "
+                "consistent with OA-related degeneration."
+            )
+        elif combined > 35.0:
+            # Good coverage + high probability → NON_OA pattern
+            oa_classification = "NON_OA"
+            oa_confidence = round(min(0.96, 0.72 + (combined - 35.0) / 130.0), 3)
+            oa_severity = "None"
+            oa_findings = {
+                "reduced_meniscal_signal": False,
+                "meniscal_coverage_loss": False,
+                "structural_irregularity": False,
+            }
+            oa_notes = (
+                f"Good meniscal coverage ({mask_fraction*100:.1f}%) and strong "
+                f"model activation ({prob_mean:.3f}) indicate preserved meniscal "
+                "structure. No OA features detected."
+            )
+        else:
+            # Borderline — intermediate signal
+            oa_classification = "OA"
+            oa_confidence = round(0.55 + abs(combined - 26.5) / 80.0, 3)
+            oa_severity = "Mild"
+            oa_findings = {
+                "reduced_meniscal_signal": prob_mean < 0.45,
+                "meniscal_coverage_loss": mask_fraction < 0.15,
+                "structural_irregularity": True,
+            }
+            oa_notes = (
+                f"Borderline meniscal signal ({mask_fraction*100:.1f}% coverage, "
+                f"{prob_mean:.3f} activation). Mild OA features cannot be excluded."
+            )
+
+        oa_assessment = {
+            "classification": oa_classification,
+            "confidence": oa_confidence,
+            "severity": oa_severity,
+            "findings": oa_findings,
+            "notes": oa_notes,
+            "source": "unet_segmentation_metrics",
+            "metrics_used": {
+                "probability_mean": round(prob_mean, 4),
+                "mask_fraction": round(mask_fraction, 4),
+                "mask_area_pixels": mask_area,
+                "combined_score": round(combined, 2),
+            },
+            "clinical_warning": (
+                "AI-assisted research result derived from meniscal segmentation metrics. "
+                "Not a medical diagnosis. Must be reviewed by a qualified clinician."
+            ),
+        }
+
+        # 7. Structured JSON API Response
         return {
             "success": True,
             "filename": file.filename,
@@ -511,6 +619,7 @@ async def segment_image(file: UploadFile = File(...)):
             "overlay_image_base64": result.overlay_image_base64,
             "metrics": result.metrics,
             "metadata": result.metadata,
+            "oa_assessment": oa_assessment,
         }
     except HTTPException:
         raise

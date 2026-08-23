@@ -4,6 +4,9 @@ import {
   PatientMeasurementsRequest,
   SegmentImageResponse,
   APIError,
+  DemoCasesListResponse,
+  DemoReport,
+  OAAssessmentResponse,
 } from '@/types/api';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -100,6 +103,51 @@ class APIService {
         throw new Error(`Image analysis failed: ${error.message}`);
       }
       throw new Error('Image analysis failed: Unknown error');
+    }
+  }
+
+  async getDemoCases(): Promise<DemoCasesListResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/v1/demo-cases`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return this.handleResponse<DemoCasesListResponse>(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch demo cases: ${error.message}`);
+      }
+      throw new Error('Failed to fetch demo cases: Unknown error');
+    }
+  }
+
+  async getDemoCase(caseId: string): Promise<DemoReport> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/v1/demo-cases/${encodeURIComponent(caseId)}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      return this.handleResponse<DemoReport>(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch demo case: ${error.message}`);
+      }
+      throw new Error('Failed to fetch demo case: Unknown error');
+    }
+  }
+
+  async oaAssessment(formData: FormData): Promise<OAAssessmentResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/v1/oa-assessment`, {
+        method: 'POST',
+        body: formData,
+      });
+      return this.handleResponse<OAAssessmentResponse>(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`OA assessment failed: ${error.message}`);
+      }
+      throw new Error('OA assessment failed: Unknown error');
     }
   }
 }

@@ -1,0 +1,98 @@
+{
+  "demo": true,
+  "clinical_use": false,
+  "report_status": "DEMO_ONLY",
+  "disclaimer": "DEMO DATA — NOT FOR CLINICAL USE. This system is a research/demo decision-support prototype and does not provide a medical diagnosis.",
+  "case_type": "OA",
+  "patient": {
+    "patient_id": "DEMO-OA-001",
+    "name": "Demo Patient OA",
+    "age": 58,
+    "sex": "Female",
+    "affected_knee": "Right",
+    "contact_info": null,
+    "clinical_notes": "Synthetic demonstration case. No real patient data."
+  },
+  "scan": {
+    "scan_type": "Knee MRI",
+    "scan_label": "Synthetic OA Demonstration Scan",
+    "scan_date": "2026-08-23",
+    "scan_id": "SCAN-DEMO-OA-001"
+  },
+  "assessment": {
+    "oa_status": "OA_SUSPECTED",
+    "classification": "OA",
+    "severity": "Moderate",
+    "confidence": 0.92,
+    "model_version": "demo-stub-v1.0",
+    "source": "DEMO — no trained OA classification model integrated"
+  },
+  "measurements": {
+    "medial_meniscus_thickness_mm": 3.2,
+    "lateral_meniscus_thickness_mm": 3.8,
+    "medial_joint_space_mm": 2.8,
+    "lateral_joint_space_mm": 3.9,
+    "femur_width_mm": 65.0,
+    "femur_ap_mm": 58.0,
+    "tibia_width_mm": 72.0,
+    "tibia_ap_mm": 48.0
+  },
+  "findings": [
+    "Reduced medial joint space consistent with synthetic OA scenario",
+    "Medial meniscus thinning observed in demo data",
+    "Degenerative morphological changes represented in synthetic model",
+    "Osteophyte simulation present at medial compartment (synthetic)",
+    "Subchondral sclerosis features consistent with moderate OA stage (synthetic)"
+  ],
+  "segmentation": {
+    "mask_area_pixels": 18420,
+    "mask_fraction": 0.28,
+    "probability_mean": 0.74,
+    "threshold": 0.5,
+    "model_name": "unet2d",
+    "source": "DEMO — synthetic segmentation metrics, not from real inference"
+  },
+  "implant_assessment": {
+    "required": true,
+    "status": "Candidate for further implant assessment",
+    "recommended_implant": {
+      "implant_id": "IMP-2024-A7",
+      "implant_name": "Genesis II Total Knee System",
+      "size": "Medium",
+      "match_score": 91.2,
+      "confidence": 72.9,
+      "measurement_difference": 4.3
+    },
+    "alternatives": [
+      {
+        "implant_id": "IMP-2024-B3",
+        "implant_name": "Attune Knee System",
+        "size": "Medium",
+        "match_score": 87.5,
+        "confidence": 68.4,
+        "measurement_difference": 6.1
+      },
+      {
+        "implant_id": "IMP-2024-C5",
+        "implant_name": "NexGen LPS-Flex",
+        "size": "Medium",
+        "match_score": 84.3,
+        "confidence": 65.2,
+        "measurement_difference": 7.8
+      }
+    ],
+    "note": "Implant matching based on synthetic measurements. Not a clinical recommendation."
+  },
+  "report_metadata": {
+    "generated_at": "2026-08-23T10:00:00Z",
+    "report_version": "1.0",
+    "pipeline_stages": [
+      "image_validation",
+      "oa_classification",
+      "segmentation",
+      "measurements",
+      "report_generation",
+      "implant_matching"
+    ]
+  }
+}

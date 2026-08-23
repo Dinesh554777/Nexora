@@ -260,8 +260,8 @@ export function ExportDialog({ isOpen, onClose, exportData }: ExportDialogProps)
           <ul>
             ${analysis.findings.map(f => `<li>${f}</li>`).join('')}
           </ul>
-          ${analysis.oaIndicators && analysis.oaIndicators.present ? `
-          <p><strong>OA Indicators:</strong> Present (${analysis.oaIndicators.severity})</p>
+          ${analysis.oaAssessment ? `
+          <p><strong>OA Assessment:</strong> ${analysis.oaAssessment.classification} (${analysis.oaAssessment.severity})</p>
           ` : ''}
         </div>
         `).join('')}

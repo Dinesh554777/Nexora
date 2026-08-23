@@ -1,0 +1,73 @@
+{
+  "demo": true,
+  "clinical_use": false,
+  "report_status": "DEMO_ONLY",
+  "disclaimer": "DEMO DATA — NOT FOR CLINICAL USE. This system is a research/demo decision-support prototype and does not provide a medical diagnosis.",
+  "case_type": "NON_OA",
+  "patient": {
+    "patient_id": "DEMO-NONOA-001",
+    "name": "Demo Patient Non-OA",
+    "age": 32,
+    "sex": "Male",
+    "affected_knee": "Right",
+    "contact_info": null,
+    "clinical_notes": "Synthetic demonstration case. No real patient data."
+  },
+  "scan": {
+    "scan_type": "Knee MRI",
+    "scan_label": "Synthetic Non-OA Demonstration Scan",
+    "scan_date": "2026-08-23",
+    "scan_id": "SCAN-DEMO-NONOA-001"
+  },
+  "assessment": {
+    "oa_status": "NO_OA_FEATURES_DETECTED",
+    "classification": "NON_OA",
+    "severity": "None",
+    "confidence": 0.95,
+    "model_version": "demo-stub-v1.0",
+    "source": "DEMO — no trained OA classification model integrated"
+  },
+  "measurements": {
+    "medial_meniscus_thickness_mm": 5.1,
+    "lateral_meniscus_thickness_mm": 4.9,
+    "medial_joint_space_mm": 4.6,
+    "lateral_joint_space_mm": 4.8,
+    "femur_width_mm": 62.0,
+    "femur_ap_mm": 55.0,
+    "tibia_width_mm": 69.0,
+    "tibia_ap_mm": 45.5
+  },
+  "findings": [
+    "Preserved joint space in both medial and lateral compartments (synthetic demo)",
+    "No simulated degenerative features detected in this demo case",
+    "Meniscal morphology represented as within synthetic normal range",
+    "Bone density and structure within normal synthetic parameters",
+    "No osteophyte simulation present (healthy synthetic scenario)"
+  ],
+  "segmentation": {
+    "mask_area_pixels": 22100,
+    "mask_fraction": 0.34,
+    "probability_mean": 0.62,
+    "threshold": 0.5,
+    "model_name": "unet2d",
+    "source": "DEMO — synthetic segmentation metrics, not from real inference"
+  },
+  "implant_assessment": {
+    "required": false,
+    "status": "No implant recommendation required for this demo case",
+    "recommended_implant": null,
+    "alternatives": [],
+    "note": "Non-OA case. Implant matching is not applicable in this synthetic demonstration scenario."
+  },
+  "report_metadata": {
+    "generated_at": "2026-08-23T10:05:00Z",
+    "report_version": "1.0",
+    "pipeline_stages": [
+      "image_validation",
+      "oa_classification",
+      "segmentation",
+      "measurements",
+      "report_generation"
+    ]
+  }
+}

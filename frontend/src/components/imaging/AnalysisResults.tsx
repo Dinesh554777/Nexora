@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import {
@@ -12,6 +13,7 @@ import {
   Printer,
   Sparkles,
   Layers,
+  ShieldAlert,
 } from 'lucide-react';
 import { ImageAnalysisResult, UploadedImage } from '@/types';
 import { PatientInfo } from '@/components/implant/PatientInfoForm';
@@ -117,6 +119,117 @@ export function AnalysisResults({ results, uploadedImages = [], patientInfo }: A
             </CardHeader>
 
             <CardContent className="space-y-6 pt-6">
+              {/* ── OA Assessment Verdict ── */}
+              {result.oaAssessment && (() => {
+                const oa = result.oaAssessment!;
+                const isOA = oa.classification === 'OA';
+                const pct = Math.round(oa.confidence * 100);
+                return (
+                  <div className={`rounded-xl border-2 p-5 ${
+                    isOA
+                      ? 'border-red-300 bg-red-50 dark:border-red-800 dark:bg-red-950/40'
+                      : 'border-green-300 bg-green-50 dark:border-green-800 dark:bg-green-950/40'
+                  }`}>
+                    {/* Main verdict */}
+                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                      <div className="flex items-center gap-3">
+                        {isOA
+                          ? <AlertTriangle className="h-8 w-8 text-red-600 flex-shrink-0" />
+                          : <CheckCircle2 className="h-8 w-8 text-green-600 flex-shrink-0" />
+                        }
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-0.5">
+                            OA Assessment Result
+                          </p>
+                          <p className={`text-2xl font-extrabold tracking-tight ${
+                            isOA ? 'text-red-700 dark:text-red-400' : 'text-green-700 dark:text-green-400'
+                          }`}>
+                            {isOA ? 'OA DETECTED' : 'NO OA FEATURES DETECTED'}
+                          </p>
+                          <p className="text-sm text-muted-foreground mt-0.5">
+                            {isOA
+                              ? 'This patient shows osteoarthritis features.'
+                              : 'This patient shows no significant OA features.'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-1">
+                        <Badge
+                          className={`text-sm px-3 py-1 font-bold ${
+                            isOA
+                              ? 'bg-red-100 text-red-800 border-red-300 dark:bg-red-900 dark:text-red-200'
+                              : 'bg-green-100 text-green-800 border-green-300 dark:bg-green-900 dark:text-green-200'
+                          }`}
+                          variant="outline"
+                        >
+                          {isOA ? 'OA Patient' : 'Non-OA Patient'}
+                        </Badge>
+                        {oa.severity !== 'None' && (
+                          <Badge variant="outline" className="text-xs">
+                            Severity: {oa.severity}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Confidence bar */}
+                    <div className="mb-4">
+                      <div className="flex justify-between text-xs font-medium mb-1">
+                        <span className="text-muted-foreground">Confidence</span>
+                        <span className={isOA ? 'text-red-700 dark:text-red-400' : 'text-green-700 dark:text-green-400'}>
+                          {pct}%
+                        </span>
+                      </div>
+                      <div className="h-3 rounded-full bg-muted overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            isOA ? 'bg-red-500' : 'bg-green-500'
+                          }`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Detected findings */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
+                      {[
+                        { key: 'reduced_meniscal_signal', label: 'Reduced meniscal signal' },
+                        { key: 'meniscal_coverage_loss', label: 'Meniscal coverage loss' },
+                        { key: 'structural_irregularity', label: 'Structural irregularity' },
+                      ].map(({ key, label }) => {
+                        const detected = oa.findings[key as keyof typeof oa.findings];
+                        return (
+                          <div
+                            key={key}
+                            className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium ${
+                              detected
+                                ? 'border-red-200 bg-red-50/60 text-red-800 dark:border-red-700 dark:bg-red-900/30 dark:text-red-300'
+                                : 'border-green-200 bg-green-50/60 text-green-800 dark:border-green-700 dark:bg-green-900/30 dark:text-green-300'
+                            }`}
+                          >
+                            {detected
+                              ? <AlertTriangle className="h-3.5 w-3.5 flex-shrink-0" />
+                              : <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" />
+                            }
+                            {label}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Notes */}
+                    <p className="text-xs text-muted-foreground leading-relaxed border-t pt-3">
+                      {oa.notes}
+                    </p>
+
+                    {/* Clinical warning */}
+                    <div className="flex items-start gap-2 mt-3 rounded-md bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 px-3 py-2">
+                      <ShieldAlert className="h-3.5 w-3.5 text-amber-600 flex-shrink-0 mt-0.5" />
+                      <p className="text-[11px] text-amber-800 dark:text-amber-300">{oa.clinical_warning}</p>
+                    </div>
+                  </div>
+                );
+              })()}
               {/* Medical Visual Results (3-column layout) */}
               <div>
                 <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-primary">

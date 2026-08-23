@@ -6,6 +6,7 @@ import { MedicalImaging } from './pages/MedicalImaging';
 import { ProgressView } from './pages/ProgressView';
 import { OAAnalytics } from './pages/OAAnalytics';
 import { Settings } from './pages/Settings';
+import { DemoCases } from './pages/DemoCases';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="progress-view" element={<ProgressView />} />
           <Route path="oa-analytics" element={<OAAnalytics />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="demo-cases" element={<DemoCases />} />
         </Route>
       </Routes>
     </BrowserRouter>
