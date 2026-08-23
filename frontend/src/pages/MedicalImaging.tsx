@@ -4,11 +4,13 @@ import { ImageUploader } from '@/components/imaging/ImageUploader';
 import { AnalysisResults } from '@/components/imaging/AnalysisResults';
 import { ImageViewer } from '@/components/imaging/ImageViewer';
 import { ClinicalDisclaimer } from '@/components/shared/ClinicalDisclaimer';
+import { PatientInfoForm, PatientInfo } from '@/components/implant/PatientInfoForm';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Brain, Image as ImageIcon } from 'lucide-react';
 import { UploadedImage, ImageAnalysisResult, AnalysisState } from '@/types';
+import { apiService } from '@/services/api';
 
 export function MedicalImaging() {
   const [xrayImages, setXrayImages] = useState<UploadedImage[]>([]);
@@ -18,6 +20,11 @@ export function MedicalImaging() {
   const [error, setError] = useState<string | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<UploadedImage | null>(null);
+  const [patientInfo, setPatientInfo] = useState<PatientInfo>({
+    patientId: '',
+    age: '',
+    sex: '',
+  });
 
   const handleXrayUpload = (image: UploadedImage) => {
     setXrayImages(prev => [...prev, image]);
@@ -52,51 +59,78 @@ export function MedicalImaging() {
     setAnalysisState('processing');
     setError(null);
 
-    // Simulate AI analysis (replace with actual API call)
-    setTimeout(() => {
-      // Demo analysis results
-      const demoResults: ImageAnalysisResult[] = allImages.map(image => ({
-        imageId: image.id,
-        findings: [
-          'Joint space evaluation completed',
-          'Bone structure assessment performed',
-          'Soft tissue analysis conducted',
-        ],
-        confidence: Math.floor(Math.random() * 20) + 75, // 75-95%
-        abnormalRegions: image.type === 'xray' 
-          ? [
-              {
-                region: 'Medial compartment',
-                description: 'Possible joint space narrowing detected',
-                severity: 'medium' as const,
-              },
-            ]
-          : [
-              {
-                region: 'Meniscus',
-                description: 'Potential tear or degeneration observed',
-                severity: 'medium' as const,
-              },
-            ],
-        measurements: {
-          meniscusThickness: +(3 + Math.random() * 3).toFixed(1),
-          jointSpaceWidth: +(4 + Math.random() * 2).toFixed(1),
-        },
-        oaIndicators: {
-          present: Math.random() > 0.5,
-          severity: ['mild', 'moderate', 'severe'][Math.floor(Math.random() * 3)] as 'mild' | 'moderate' | 'severe',
-          observations: [
-            'Joint space narrowing detected',
-            'Osteophyte formation observed',
-            'Cartilage degradation indicated',
-          ],
-        },
-        timestamp: new Date(),
-      }));
+    try {
+      const realResults: ImageAnalysisResult[] = await Promise.all(
+        allImages.map(async (image) => {
+          const formData = new FormData();
+          formData.append('file', image.file);
 
-      setAnalysisResults(demoResults);
+          const response = await apiService.segmentImage(formData);
+          const metrics = response.metrics ?? {};
+          const probabilityMean = typeof metrics.probability_mean === 'number'
+            ? Number(metrics.probability_mean)
+            : undefined;
+          const maskAreaPixels = typeof metrics.mask_area_pixels === 'number'
+            ? Number(metrics.mask_area_pixels)
+            : undefined;
+          const maskFraction = typeof metrics.mask_fraction === 'number'
+            ? Number(metrics.mask_fraction)
+            : undefined;
+          const threshold = typeof metrics.threshold === 'number'
+            ? Number(metrics.threshold)
+            : undefined;
+
+          const normalizeBase64 = (value?: string) => {
+            if (!value) {
+              return undefined;
+            }
+            return value.startsWith('data:image') ? value : `data:image/png;base64,${value}`;
+          };
+
+          const findings = [
+            'The uploaded knee image was processed successfully by the Nexora AI segmentation pipeline.',
+          ];
+
+          if (typeof probabilityMean === 'number') {
+            findings.push(`Probability Mean: ${probabilityMean.toFixed(4)}`);
+          }
+          if (typeof maskAreaPixels === 'number') {
+            findings.push(`Segmented region area: ${maskAreaPixels.toLocaleString()} pixels`);
+          }
+          if (typeof maskFraction === 'number') {
+            findings.push(`Mask fraction: ${(maskFraction * 100).toFixed(2)}%`);
+          }
+
+          return {
+            imageId: image.id,
+            filename: response.filename,
+            findings,
+            confidence: typeof probabilityMean === 'number'
+              ? Math.max(0, Math.min(100, Math.round(probabilityMean * 100)))
+              : 95,
+            abnormalRegions: [],
+            originalImageBase64: image.preview,
+            maskImageBase64: normalizeBase64(response.mask_image_base64),
+            overlayImageBase64: normalizeBase64(response.overlay_image_base64),
+            technicalMetrics: {
+              probabilityMean,
+              maskAreaPixels,
+              maskFraction,
+              threshold,
+            },
+            timestamp: new Date(),
+          };
+        })
+      );
+
+      setAnalysisResults(realResults);
       setAnalysisState('complete');
-    }, 3000);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Analysis failed unexpectedly.';
+      setError(message);
+      setAnalysisState('failed');
+      setAnalysisResults([]);
+    }
   };
 
   const handleClear = () => {
@@ -149,6 +183,11 @@ export function MedicalImaging() {
       )}
 
       {/* Upload Sections */}
+      <PatientInfoForm
+        patientInfo={patientInfo}
+        onChange={setPatientInfo}
+      />
+
       <div className="grid gap-6 lg:grid-cols-2">
         <ImageUploader
           type="xray"
@@ -229,7 +268,10 @@ export function MedicalImaging() {
 
       {/* Analysis Results */}
       {analysisState === 'complete' && analysisResults.length > 0 && (
-        <AnalysisResults results={analysisResults} />
+        <AnalysisResults
+          results={analysisResults}
+          patientInfo={patientInfo}
+        />
       )}
 
       <ClinicalDisclaimer />

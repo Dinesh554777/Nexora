@@ -2,6 +2,7 @@ import {
   AnalyticsResponse,
   ImplantMatchResponse,
   PatientMeasurementsRequest,
+  SegmentImageResponse,
   APIError,
 } from '@/types/api';
 
@@ -83,6 +84,22 @@ class APIService {
         throw new Error(`Health check failed: ${error.message}`);
       }
       throw new Error('Health check failed: Unknown error');
+    }
+  }
+
+  async segmentImage(formData: FormData): Promise<SegmentImageResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/v1/segment`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      return this.handleResponse<SegmentImageResponse>(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Image analysis failed: ${error.message}`);
+      }
+      throw new Error('Image analysis failed: Unknown error');
     }
   }
 }

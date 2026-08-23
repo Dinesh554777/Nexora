@@ -56,6 +56,23 @@ export interface AnalyticsResponse {
   sexDistribution: SexDistribution[];
 }
 
+export interface SegmentMetricsResponse {
+  mask_area_pixels?: number;
+  mask_fraction?: number;
+  probability_mean?: number;
+  threshold?: number;
+  [key: string]: unknown;
+}
+
+export interface SegmentImageResponse {
+  success: boolean;
+  filename: string;
+  mask_image_base64: string;
+  overlay_image_base64: string;
+  metrics: SegmentMetricsResponse;
+  metadata: Record<string, unknown>;
+}
+
 // Error Response
 export interface APIError {
   detail: string;

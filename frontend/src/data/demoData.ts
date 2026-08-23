@@ -16,16 +16,26 @@ export const demoPatients: Patient[] = [
   { id: 'P013', age: 71, sex: 'M', meniscusThickness: 2.9, oaStatus: 'OA', analysisStatus: 'Completed' },
   { id: 'P014', age: 40, sex: 'F', meniscusThickness: 5.9, oaStatus: 'Non-OA', analysisStatus: 'Completed' },
   { id: 'P015', age: 69, sex: 'M', meniscusThickness: 3.3, oaStatus: 'OA', analysisStatus: 'Completed' },
+  { id: 'P016', age: 58, sex: 'F', meniscusThickness: 4.9, oaStatus: 'Non-OA', analysisStatus: 'Completed' },
+  { id: 'P017', age: 63, sex: 'M', meniscusThickness: 3.8, oaStatus: 'OA', analysisStatus: 'Completed' },
+  { id: 'P018', age: 46, sex: 'F', meniscusThickness: 6.0, oaStatus: 'Non-OA', analysisStatus: 'Completed' },
+  { id: 'P019', age: 77, sex: 'F', meniscusThickness: 2.7, oaStatus: 'OA', analysisStatus: 'Completed' },
+  { id: 'P020', age: 53, sex: 'M', meniscusThickness: 5.4, oaStatus: 'Non-OA', analysisStatus: 'Completed' },
+  { id: 'P021', age: 67, sex: 'F', meniscusThickness: 3.7, oaStatus: 'OA', analysisStatus: 'Pending' },
+  { id: 'P022', age: 49, sex: 'M', meniscusThickness: 5.6, oaStatus: 'Non-OA', analysisStatus: 'Completed' },
+  { id: 'P023', age: 74, sex: 'M', meniscusThickness: 2.6, oaStatus: 'OA', analysisStatus: 'Completed' },
+  { id: 'P024', age: 44, sex: 'F', meniscusThickness: 6.4, oaStatus: 'Non-OA', analysisStatus: 'Completed' },
+  { id: 'P025', age: 61, sex: 'F', meniscusThickness: 4.1, oaStatus: 'OA', analysisStatus: 'Completed' },
 ];
 
 export const demoAnalyticsSummary: AnalyticsSummary = {
-  totalPatients: 15,
-  oaPatients: 8,
-  nonOaPatients: 7,
-  oaPercentage: 53.3,
-  avgMeniscusThickness: 4.3,
+  totalPatients: 25,
+  oaPatients: 13,
+  nonOaPatients: 12,
+  oaPercentage: 52.0,
+  avgMeniscusThickness: 4.4,
   minMeniscusThickness: 2.5,
-  maxMeniscusThickness: 6.3,
+  maxMeniscusThickness: 6.4,
 };
 
 // Function to calculate analytics from patient data

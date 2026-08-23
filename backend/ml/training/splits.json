@@ -1,0 +1,83 @@
+{
+  "source": "synthetic_fixtures_test_only",
+  "seed": 42,
+  "ratios": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15000000000000005
+  },
+  "splits": {
+    "train": {
+      "subjects": [
+        "phantom_002",
+        "phantom_003",
+        "phantom_004",
+        "phantom_006",
+        "phantom_007",
+        "phantom_008"
+      ],
+      "samples": [
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_003.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_003.nii.gz",
+          "subject_id": "phantom_003"
+        },
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_006.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_006.nii.gz",
+          "subject_id": "phantom_006"
+        },
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_007.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_007.nii.gz",
+          "subject_id": "phantom_007"
+        },
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_004.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_004.nii.gz",
+          "subject_id": "phantom_004"
+        },
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_008.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_008.nii.gz",
+          "subject_id": "phantom_008"
+        },
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_002.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_002.nii.gz",
+          "subject_id": "phantom_002"
+        }
+      ]
+    },
+    "val": {
+      "subjects": [
+        "phantom_005"
+      ],
+      "samples": [
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_005.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_005.nii.gz",
+          "subject_id": "phantom_005"
+        }
+      ]
+    },
+    "test": {
+      "subjects": [
+        "phantom_000",
+        "phantom_001"
+      ],
+      "samples": [
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_000.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_000.nii.gz",
+          "subject_id": "phantom_000"
+        },
+        {
+          "image": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\images\\phantom_001.nii.gz",
+          "mask": "C:\\Users\\hp\\AppData\\Local\\Temp\\nexora_phase4_cm5f1yyh\\masks\\phantom_001.nii.gz",
+          "subject_id": "phantom_001"
+        }
+      ]
+    }
+  }
+}

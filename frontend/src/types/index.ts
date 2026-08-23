@@ -49,6 +49,7 @@ export interface UploadedImage {
 
 export interface ImageAnalysisResult {
   imageId: string;
+  filename?: string;
   findings: string[];
   confidence: number;
   abnormalRegions: Array<{
@@ -64,6 +65,15 @@ export interface ImageAnalysisResult {
     present: boolean;
     severity: 'none' | 'mild' | 'moderate' | 'severe';
     observations: string[];
+  };
+  originalImageBase64?: string;
+  maskImageBase64?: string;
+  overlayImageBase64?: string;
+  technicalMetrics?: {
+    probabilityMean?: number;
+    maskAreaPixels?: number;
+    maskFraction?: number;
+    threshold?: number;
   };
   timestamp: Date;
 }
