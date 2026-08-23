@@ -3,6 +3,7 @@ import { AppLayout } from './components/layout/AppLayout';
 import { Dashboard } from './pages/Dashboard';
 import { ImplantSizing } from './pages/ImplantSizing';
 import { MedicalImaging } from './pages/MedicalImaging';
+import { ProgressView } from './pages/ProgressView';
 import { OAAnalytics } from './pages/OAAnalytics';
 import { Settings } from './pages/Settings';
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="implant-sizing" element={<ImplantSizing />} />
           <Route path="medical-imaging" element={<MedicalImaging />} />
+          <Route path="progress-view" element={<ProgressView />} />
           <Route path="oa-analytics" element={<OAAnalytics />} />
           <Route path="settings" element={<Settings />} />
         </Route>

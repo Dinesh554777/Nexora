@@ -1390,3 +1390,138 @@
 {"timestamp":"2026-08-23T05:44:18.206413+00:00","event":"inference_completed","payload":{"filename":"mri_test.png","adapter_name":"UNetModelAdapter","execution_time_ms":38.44309999840334}}
 {"timestamp":"2026-08-23T05:44:18.237638+00:00","event":"postprocessing_completed","payload":{"filename":"mri_test.png","metrics":{"mask_area_pixels":7121,"mask_fraction":0.1086578369140625,"probability_mean":0.4841848313808441,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
 {"timestamp":"2026-08-23T05:44:18.241970+00:00","event":"segmentation_success","payload":{"filename":"mri_test.png","metrics":{"mask_area_pixels":7121,"mask_fraction":0.1086578369140625,"probability_mean":0.4841848313808441,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T05:59:39.590548+00:00","event":"segment_request_started","payload":{"filename":"WhatsApp Image 2026-08-22 at 4.03.37 PM.jpeg","content_type":"image/jpeg"}}
+{"timestamp":"2026-08-23T05:59:39.591060+00:00","event":"image_validated","payload":{"filename":"WhatsApp Image 2026-08-22 at 4.03.37 PM.jpeg","original_width":1600,"original_height":341}}
+{"timestamp":"2026-08-23T05:59:39.638877+00:00","event":"preprocessing_completed","payload":{"filename":"WhatsApp Image 2026-08-22 at 4.03.37 PM.jpeg","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T05:59:39.638877+00:00","event":"model_resolved","payload":{"filename":"WhatsApp Image 2026-08-22 at 4.03.37 PM.jpeg","adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T05:59:39.944638+00:00","event":"inference_completed","payload":{"filename":"WhatsApp Image 2026-08-22 at 4.03.37 PM.jpeg","adapter_name":"UNetModelAdapter","execution_time_ms":302.5056000042241}}
+{"timestamp":"2026-08-23T05:59:40.244375+00:00","event":"postprocessing_completed","payload":{"filename":"WhatsApp Image 2026-08-22 at 4.03.37 PM.jpeg","metrics":{"mask_area_pixels":18071,"mask_fraction":0.2757415771484375,"probability_mean":0.5510441064834595,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T05:59:40.279943+00:00","event":"segmentation_success","payload":{"filename":"WhatsApp Image 2026-08-22 at 4.03.37 PM.jpeg","metrics":{"mask_area_pixels":18071,"mask_fraction":0.2757415771484375,"probability_mean":0.5510441064834595,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:00:30.370569+00:00","event":"segment_request_started","payload":{"filename":"256_2023_4354_Fig2_HTML.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:00:30.372805+00:00","event":"image_validated","payload":{"filename":"256_2023_4354_Fig2_HTML.png","original_width":685,"original_height":437}}
+{"timestamp":"2026-08-23T06:00:30.382170+00:00","event":"preprocessing_completed","payload":{"filename":"256_2023_4354_Fig2_HTML.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:00:30.388003+00:00","event":"model_resolved","payload":{"filename":"256_2023_4354_Fig2_HTML.png","adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:00:30.539677+00:00","event":"inference_completed","payload":{"filename":"256_2023_4354_Fig2_HTML.png","adapter_name":"UNetModelAdapter","execution_time_ms":151.18339999753516}}
+{"timestamp":"2026-08-23T06:00:30.784798+00:00","event":"postprocessing_completed","payload":{"filename":"256_2023_4354_Fig2_HTML.png","metrics":{"mask_area_pixels":4529,"mask_fraction":0.0691070556640625,"probability_mean":0.47387000918388367,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:00:30.832900+00:00","event":"segmentation_success","payload":{"filename":"256_2023_4354_Fig2_HTML.png","metrics":{"mask_area_pixels":4529,"mask_fraction":0.0691070556640625,"probability_mean":0.47387000918388367,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:11:08.557014+00:00","event":"segment_request_started","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","content_type":"image/jpeg"}}
+{"timestamp":"2026-08-23T06:11:08.557014+00:00","event":"image_validated","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","original_width":224,"original_height":224}}
+{"timestamp":"2026-08-23T06:11:08.557014+00:00","event":"preprocessing_completed","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:11:08.557014+00:00","event":"model_resolved","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:11:08.740037+00:00","event":"inference_completed","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","adapter_name":"UNetModelAdapter","execution_time_ms":169.71750000084285}}
+{"timestamp":"2026-08-23T06:11:08.756558+00:00","event":"postprocessing_completed","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.45669257640838623,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:11:08.760737+00:00","event":"segmentation_success","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.45669257640838623,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:11:42.527598+00:00","event":"segment_request_started","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","content_type":"image/jpeg"}}
+{"timestamp":"2026-08-23T06:11:42.528464+00:00","event":"image_validated","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","original_width":224,"original_height":224}}
+{"timestamp":"2026-08-23T06:11:42.531090+00:00","event":"preprocessing_completed","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:11:42.531090+00:00","event":"model_resolved","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:11:42.724184+00:00","event":"inference_completed","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","adapter_name":"UNetModelAdapter","execution_time_ms":190.17210000311024}}
+{"timestamp":"2026-08-23T06:11:42.739355+00:00","event":"postprocessing_completed","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.45669257640838623,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:11:42.739355+00:00","event":"segmentation_success","payload":{"filename":"WhatsApp Image 2026-08-23 at 11.38.46 AM.jpeg","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.45669257640838623,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:11:42.758889+00:00","event":"segment_request_started","payload":{"filename":"256_2023_4354_Fig2_HTML (1).png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:11:42.761351+00:00","event":"image_validated","payload":{"filename":"256_2023_4354_Fig2_HTML (1).png","original_width":685,"original_height":437}}
+{"timestamp":"2026-08-23T06:11:42.789122+00:00","event":"preprocessing_completed","payload":{"filename":"256_2023_4354_Fig2_HTML (1).png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:11:42.789122+00:00","event":"model_resolved","payload":{"filename":"256_2023_4354_Fig2_HTML (1).png","adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:11:42.993714+00:00","event":"inference_completed","payload":{"filename":"256_2023_4354_Fig2_HTML (1).png","adapter_name":"UNetModelAdapter","execution_time_ms":198.0255000089528}}
+{"timestamp":"2026-08-23T06:11:43.110611+00:00","event":"postprocessing_completed","payload":{"filename":"256_2023_4354_Fig2_HTML (1).png","metrics":{"mask_area_pixels":4529,"mask_fraction":0.0691070556640625,"probability_mean":0.47387000918388367,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:11:43.125014+00:00","event":"segmentation_success","payload":{"filename":"256_2023_4354_Fig2_HTML (1).png","metrics":{"mask_area_pixels":4529,"mask_fraction":0.0691070556640625,"probability_mean":0.47387000918388367,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:18:57.103697+00:00","event":"segment_request_started","payload":{"filename":"medical_scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:18:57.103697+00:00","event":"image_validated","payload":{"filename":"medical_scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:18:57.103697+00:00","event":"preprocessing_completed","payload":{"filename":"medical_scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:18:57.103697+00:00","event":"model_resolved","payload":{"filename":"medical_scan.png","adapter_name":"DummyConfiguredModelAdapter"}}
+{"timestamp":"2026-08-23T06:18:57.117916+00:00","event":"inference_completed","payload":{"filename":"medical_scan.png","adapter_name":"DummyConfiguredModelAdapter","execution_time_ms":12.5}}
+{"timestamp":"2026-08-23T06:18:57.120054+00:00","event":"postprocessing_completed","payload":{"filename":"medical_scan.png","metrics":{"segmented_area_pixels":150},"adapter_name":"DummyConfiguredModelAdapter"}}
+{"timestamp":"2026-08-23T06:18:57.137374+00:00","event":"segmentation_success","payload":{"filename":"medical_scan.png","metrics":{"segmented_area_pixels":150},"adapter_name":"DummyConfiguredModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:18:57.226696+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:18:57.228683+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:18:57.231697+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:18:57.233687+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"PendingModelAdapter"}}
+{"timestamp":"2026-08-23T06:18:57.235598+00:00","event":"segmentation_failed","payload":{"filename":"scan.png","stage":"inference","error":"No trained ML model weights or framework adapter registered. Real model implementation is pending main branch updates from the ML team."}}
+{"timestamp":"2026-08-23T06:18:57.338613+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:18:57.341649+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:18:57.344664+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:18:57.345651+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"DummyConfiguredModelAdapter"}}
+{"timestamp":"2026-08-23T06:18:57.346548+00:00","event":"inference_completed","payload":{"filename":"scan.png","adapter_name":"DummyConfiguredModelAdapter","execution_time_ms":12.5}}
+{"timestamp":"2026-08-23T06:18:57.348659+00:00","event":"segmentation_failed","payload":{"filename":"scan.png","stage":"postprocessing","error":"Postprocessing is not configured. Real ML model output specifications are pending main branch updates from the ML team."}}
+{"timestamp":"2026-08-23T06:19:02.559229+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:02.559749+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:02.564610+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:02.565261+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:02.573080+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:02.573630+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:02.574143+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:02.574910+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"ExplodingAdapter"}}
+{"timestamp":"2026-08-23T06:19:02.575497+00:00","event":"segmentation_failed","payload":{"filename":"scan.png","stage":"inference","error":"CUDA error at C:/models/weights.pt"}}
+{"timestamp":"2026-08-23T06:19:02.580895+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:02.581412+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:02.582188+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:02.582893+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"WorkingAdapter"}}
+{"timestamp":"2026-08-23T06:19:02.582893+00:00","event":"inference_completed","payload":{"filename":"scan.png","adapter_name":"WorkingAdapter","execution_time_ms":1.0}}
+{"timestamp":"2026-08-23T06:19:02.583414+00:00","event":"segmentation_failed","payload":{"filename":"scan.png","stage":"postprocessing","error":"mask encoder crashed"}}
+{"timestamp":"2026-08-23T06:19:02.589264+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:02.594104+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:02.594624+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:02.595700+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:02.631415+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:02.709878+00:00","event":"inference_completed","payload":{"filename":"scan.png","adapter_name":"UNetModelAdapter","execution_time_ms":70.82789999549277}}
+{"timestamp":"2026-08-23T06:19:02.711883+00:00","event":"postprocessing_completed","payload":{"filename":"scan.png","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.4609697759151459,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:02.711883+00:00","event":"segmentation_success","payload":{"filename":"scan.png","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.4609697759151459,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:19:02.720637+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:02.721160+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:02.722232+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:02.722737+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:02.777755+00:00","event":"inference_completed","payload":{"filename":"scan.png","adapter_name":"UNetModelAdapter","execution_time_ms":54.33709999488201}}
+{"timestamp":"2026-08-23T06:19:02.779761+00:00","event":"postprocessing_completed","payload":{"filename":"scan.png","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.4609697759151459,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:02.779761+00:00","event":"segmentation_success","payload":{"filename":"scan.png","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.4609697759151459,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:19:02.787320+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:02.787888+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:02.788540+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:02.789068+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:02.847460+00:00","event":"inference_completed","payload":{"filename":"scan.png","adapter_name":"UNetModelAdapter","execution_time_ms":58.228599998983555}}
+{"timestamp":"2026-08-23T06:19:02.849458+00:00","event":"postprocessing_completed","payload":{"filename":"scan.png","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.4609697759151459,"threshold":0.5},"adapter_name":"UNetModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:02.849458+00:00","event":"segmentation_success","payload":{"filename":"scan.png","metrics":{"mask_area_pixels":0,"mask_fraction":0.0,"probability_mean":0.4609697759151459,"threshold":0.5},"adapter_name":"UNetModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:19:03.232942+00:00","event":"segment_request_started","payload":{"filename":"medical_scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.233473+00:00","event":"image_validated","payload":{"filename":"medical_scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:03.235151+00:00","event":"preprocessing_completed","payload":{"filename":"medical_scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:03.236266+00:00","event":"model_resolved","payload":{"filename":"medical_scan.png","adapter_name":"DummyConfiguredModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:03.236266+00:00","event":"inference_completed","payload":{"filename":"medical_scan.png","adapter_name":"DummyConfiguredModelAdapter","execution_time_ms":8.5}}
+{"timestamp":"2026-08-23T06:19:03.236853+00:00","event":"postprocessing_completed","payload":{"filename":"medical_scan.png","metrics":{"segmented_area_pixels":150},"adapter_name":"DummyConfiguredModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:03.237526+00:00","event":"segmentation_success","payload":{"filename":"medical_scan.png","metrics":{"segmented_area_pixels":150},"adapter_name":"DummyConfiguredModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:19:03.253290+00:00","event":"segment_request_started","payload":{"filename":"doc.txt","content_type":"text/plain"}}
+{"timestamp":"2026-08-23T06:19:03.259311+00:00","event":"segment_request_started","payload":{"filename":"corrupt.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.323895+00:00","event":"segment_request_started","payload":{"filename":"huge.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.331610+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.332285+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:03.332886+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:03.333414+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"PendingModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:03.333414+00:00","event":"segmentation_failed","payload":{"filename":"scan.png","stage":"inference","error":"No trained ML model weights or framework adapter registered. Real model implementation is pending main branch updates from the ML team."}}
+{"timestamp":"2026-08-23T06:19:03.340778+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.341792+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:03.343779+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:03.343779+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"DummyConfiguredModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:03.344779+00:00","event":"inference_completed","payload":{"filename":"scan.png","adapter_name":"DummyConfiguredModelAdapter","execution_time_ms":8.5}}
+{"timestamp":"2026-08-23T06:19:03.344779+00:00","event":"segmentation_failed","payload":{"filename":"scan.png","stage":"postprocessing","error":"Postprocessing is not configured. Real ML model output specifications are pending main branch updates from the ML team."}}
+{"timestamp":"2026-08-23T06:19:03.354596+00:00","event":"segment_request_started","payload":{"filename":"scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.355120+00:00","event":"image_validated","payload":{"filename":"scan.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:03.357453+00:00","event":"preprocessing_completed","payload":{"filename":"scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:03.357973+00:00","event":"model_resolved","payload":{"filename":"scan.png","adapter_name":"MockModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:03.359016+00:00","event":"inference_completed","payload":{"filename":"scan.png","adapter_name":"MockModelAdapter","execution_time_ms":null}}
+{"timestamp":"2026-08-23T06:19:03.359538+00:00","event":"postprocessing_completed","payload":{"filename":"scan.png","metrics":{},"adapter_name":"MockModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:03.360061+00:00","event":"segmentation_success","payload":{"filename":"scan.png","metrics":{},"adapter_name":"MockModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:19:03.367178+00:00","event":"segment_request_started","payload":{"filename":"test.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.368459+00:00","event":"image_validated","payload":{"filename":"test.png","original_width":100,"original_height":100}}
+{"timestamp":"2026-08-23T06:19:03.371395+00:00","event":"preprocessing_completed","payload":{"filename":"test.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:03.371916+00:00","event":"model_resolved","payload":{"filename":"test.png","adapter_name":"DummyConfiguredModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:03.371916+00:00","event":"inference_completed","payload":{"filename":"test.png","adapter_name":"DummyConfiguredModelAdapter","execution_time_ms":8.5}}
+{"timestamp":"2026-08-23T06:19:03.372671+00:00","event":"postprocessing_completed","payload":{"filename":"test.png","metrics":{"segmented_area_pixels":150},"adapter_name":"DummyConfiguredModelAdapter"}}
+{"timestamp":"2026-08-23T06:19:03.372671+00:00","event":"segmentation_success","payload":{"filename":"test.png","metrics":{"segmented_area_pixels":150},"adapter_name":"DummyConfiguredModelAdapter","response_status":200}}
+{"timestamp":"2026-08-23T06:19:03.382521+00:00","event":"segment_request_started","payload":{"filename":"test_scan.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.386950+00:00","event":"image_validated","payload":{"filename":"test_scan.png","original_width":128,"original_height":128}}
+{"timestamp":"2026-08-23T06:19:03.388460+00:00","event":"preprocessing_completed","payload":{"filename":"test_scan.png","processed_shape":[256,256,3]}}
+{"timestamp":"2026-08-23T06:19:03.389886+00:00","event":"model_resolved","payload":{"filename":"test_scan.png","adapter_name":"DummyAdapterForUploadTest"}}
+{"timestamp":"2026-08-23T06:19:03.390389+00:00","event":"inference_completed","payload":{"filename":"test_scan.png","adapter_name":"DummyAdapterForUploadTest","execution_time_ms":5.0}}
+{"timestamp":"2026-08-23T06:19:03.390389+00:00","event":"postprocessing_completed","payload":{"filename":"test_scan.png","metrics":{},"adapter_name":"DummyAdapterForUploadTest"}}
+{"timestamp":"2026-08-23T06:19:03.391133+00:00","event":"segmentation_success","payload":{"filename":"test_scan.png","metrics":{},"adapter_name":"DummyAdapterForUploadTest","response_status":200}}
+{"timestamp":"2026-08-23T06:19:03.397946+00:00","event":"segment_request_started","payload":{"filename":"notes.txt","content_type":"text/plain"}}
+{"timestamp":"2026-08-23T06:19:03.405889+00:00","event":"segment_request_started","payload":{"filename":"corrupt.png","content_type":"image/png"}}
+{"timestamp":"2026-08-23T06:19:03.415436+00:00","event":"segment_request_started","payload":{"filename":"large_scan.png","content_type":"image/png"}}

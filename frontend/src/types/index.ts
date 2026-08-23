@@ -95,6 +95,38 @@ export interface PatientMedicalReportData {
   status: 'Completed' | 'Pending' | 'Failed';
 }
 
+// Progress Comparison Types
+export interface MetricDifference {
+  metricName: string;
+  previousValue: number | undefined;
+  currentValue: number | undefined;
+  previousFormatted: string;
+  currentFormatted: string;
+  differenceFormatted: string;
+  differenceType: 'positive' | 'negative' | 'neutral' | 'unavailable';
+}
+
+export interface ScanComparisonData {
+  patientInfo?: {
+    patientName?: string;
+    patientId?: string;
+    age?: string;
+    sex?: string;
+  };
+  previousScan: {
+    date: string;
+    image: UploadedImage;
+    result: ImageAnalysisResult;
+  };
+  currentScan: {
+    date: string;
+    image: UploadedImage;
+    result: ImageAnalysisResult;
+  };
+  metricDifferences: MetricDifference[];
+  summary: string;
+}
+
 // Export Types
 export interface ExportData {
   patientInfo?: {

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Ruler, BarChart3, Users } from 'lucide-react';
+import { Ruler, BarChart3, Users, History } from 'lucide-react';
 
 export function QuickActions() {
   const navigate = useNavigate();
@@ -13,6 +13,13 @@ export function QuickActions() {
       icon: Ruler,
       onClick: () => navigate('/implant-sizing'),
       variant: 'default' as const,
+    },
+    {
+      title: 'Progress view',
+      description: 'Compare previous vs current AI scans for a patient',
+      icon: History,
+      onClick: () => navigate('/progress-view'),
+      variant: 'outline' as const,
     },
     {
       title: 'OA dashboard',
@@ -36,7 +43,7 @@ export function QuickActions() {
         <CardTitle className="text-xl">Clinical workflow</CardTitle>
         <CardDescription>Distinct tools for diagnosis, review, and planning</CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-4 md:grid-cols-3">
+      <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {actions.map(({ title, description, icon: Icon, onClick, variant }) => (
           <Button
             key={title}
