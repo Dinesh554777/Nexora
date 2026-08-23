@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 
 export interface PatientInfo {
   patientId: string;
+  patientName?: string;
   age: string;
   sex: 'M' | 'F' | '';
 }
@@ -18,18 +19,31 @@ export function PatientInfoForm({ patientInfo, onChange }: PatientInfoFormProps)
     <Card>
       <CardHeader>
         <CardTitle>Patient Information</CardTitle>
-        <CardDescription>Optional patient demographics (not sent to AI)</CardDescription>
+        <CardDescription>Optional patient demographics for reporting</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="patientId">Patient ID (Optional)</Label>
-          <Input
-            id="patientId"
-            type="text"
-            placeholder="e.g., P001"
-            value={patientInfo.patientId}
-            onChange={(e) => onChange({ ...patientInfo, patientId: e.target.value })}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="patientName">Patient Name (Optional)</Label>
+            <Input
+              id="patientName"
+              type="text"
+              placeholder="e.g., John Doe"
+              value={patientInfo.patientName || ''}
+              onChange={(e) => onChange({ ...patientInfo, patientName: e.target.value })}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="patientId">Patient ID (Optional)</Label>
+            <Input
+              id="patientId"
+              type="text"
+              placeholder="e.g., P001"
+              value={patientInfo.patientId}
+              onChange={(e) => onChange({ ...patientInfo, patientId: e.target.value })}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">

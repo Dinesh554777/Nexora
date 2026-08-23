@@ -80,10 +80,26 @@ export interface ImageAnalysisResult {
 
 export type AnalysisState = 'ready' | 'uploading' | 'processing' | 'complete' | 'failed';
 
+// Patient Medical Result Report Types
+export interface PatientMedicalReportData {
+  reportId: string;
+  generatedAt: Date;
+  patientInfo: {
+    patientName?: string;
+    patientId?: string;
+    age?: string;
+    sex?: string;
+  };
+  analysisResult: ImageAnalysisResult;
+  imageType?: 'xray' | 'mri';
+  status: 'Completed' | 'Pending' | 'Failed';
+}
+
 // Export Types
 export interface ExportData {
   patientInfo?: {
     patientId?: string;
+    patientName?: string;
     age?: string;
     sex?: string;
   };

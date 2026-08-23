@@ -270,6 +270,7 @@ export function MedicalImaging() {
       {analysisState === 'complete' && analysisResults.length > 0 && (
         <AnalysisResults
           results={analysisResults}
+          uploadedImages={[...xrayImages, ...mriImages]}
           patientInfo={patientInfo}
         />
       )}
